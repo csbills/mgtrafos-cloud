@@ -7,14 +7,17 @@ import history from './history';
 import { GlobalStyle } from './styles/global';
 
 import { AuthProvider } from './contexts/AuthContext';
+import { FileProvider } from './contexts/FilesContext';
 
 function App() {
   return (
     <AuthProvider>
-      <Router history={history}>
-        <Routes />
-        <GlobalStyle />
-      </Router>
+      <FileProvider>
+        <Router history={history}>
+          <Routes />
+          <GlobalStyle />
+        </Router>
+      </FileProvider>
     </AuthProvider>
   );
 }

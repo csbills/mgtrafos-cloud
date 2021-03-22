@@ -1,7 +1,5 @@
-import profileImg from '../../assets/capturar.png';
-import bellSVG from '../../assets/bell.svg';
-import searchSVG from '../../assets/search.svg';
-import downRight from '../../assets/down-arrow.svg';
+import { useEffect, useState } from 'react';
+import { useFiles } from '../../contexts/FilesContext';
 
 import {
     Container,
@@ -10,17 +8,33 @@ import {
     ProfileImage,
 } from './styles';
 
-export function Header() {
+import profileImg from '../../assets/capturar.png';
+import bellSVG from '../../assets/bell.svg';
+import searchSVG from '../../assets/search.svg';
+import downRight from '../../assets/down-arrow.svg';
+
+interface HeaderProps {
+    onOpenNewUploadModal: () => void;
+}
+
+export function Header({ onOpenNewUploadModal }: HeaderProps) {
+    const { uploadedFiles, getFilteredFiles } = useFiles();
+    const [search, setSearch] = useState('');
+
+    useEffect(() => {
+        getFilteredFiles(search);
+    }, [search, uploadedFiles]);
+
     return (
         <Container>
             <InputContainer>
                 <img src={searchSVG} alt="search" />
-                <input placeholder="Search Here" />
+                <input placeholder="Search Here" onChange={e => setSearch(e.target.value)} />
             </InputContainer>
 
             <ProfileContainer>
-                <button>Enviar arquivo</button>
-                <img src={bellSVG} alt="bell" width="24" height="24"/>
+                <button onClick={onOpenNewUploadModal}>Enviar arquivo</button>
+                <img src={bellSVG} alt="bell" width="24" height="24" />
                 <ProfileImage>
                     <img src={profileImg} alt="profile" />
                 </ProfileImage>

@@ -2,13 +2,28 @@ import { Header } from '../Header';
 import { Container } from './styles';
 import { QuickAccess } from '../../components/QuickAccess';
 import { FilesList } from '../../components/FilesList';
+import { UploadModal } from '../../components/UploadModal';
+import { useState } from 'react';
 
 export function Content() {
+    const [isNewUploadModalOpen, setIsNewUploadModalOpen] = useState(false);
+    function handleOpenNewUploadModal(){
+        setIsNewUploadModalOpen(true);
+    }
+
+    function handleCloseNewUploadModal(){
+        setIsNewUploadModalOpen(false);
+    }
+
     return (
         <Container>
-            <Header />
+            <Header onOpenNewUploadModal={handleOpenNewUploadModal} />
             <QuickAccess />
-            <FilesList />               
+            <FilesList /> 
+            <UploadModal 
+                isOpen={isNewUploadModalOpen}
+                onRequestClose={handleCloseNewUploadModal}
+            />              
         </Container>
     )
 }
