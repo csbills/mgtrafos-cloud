@@ -18,12 +18,12 @@ interface HeaderProps {
 }
 
 export function Header({ onOpenNewUploadModal }: HeaderProps) {
-    const { uploadedFiles, getFilteredFiles } = useFiles();
+    const { files, getFilteredFiles } = useFiles();
     const [search, setSearch] = useState('');
 
     useEffect(() => {
         getFilteredFiles(search);
-    }, [search, uploadedFiles]);
+    }, [search, files]);
 
     return (
         <Container>

@@ -22,11 +22,11 @@ export interface IFile {
 }
 
 export function FilesList() {
-    const { getFiles, filteredFiles } = useFiles();
+    const { getFiles, filteredFiles, uploadedFiles } = useFiles();
 
     useEffect(() => {
         getFiles();
-    }, []);
+    }, [uploadedFiles]);
 
     function getExtension(fileName: string) {
         return fileName.split('.').pop();

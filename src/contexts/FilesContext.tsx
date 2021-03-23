@@ -33,36 +33,21 @@ export interface IFile {
 }
 
 interface IFileContextData {
+    files: IFile[];
     uploadedFiles: IFile[];
     deleteFile(id: string): void;
     handleUpload(file: any): void;
     getFiles: () => Promise<void>,
     getFilteredFiles: (search: string) => void,
     filteredFiles: IFile[],
+    setUploadedFiles: (files: IFile[]) => void,
 }
 const FilesContext = createContext<IFileContextData>({} as IFileContextData);
 
 const FileProvider: React.FC = ({ children }) => {
+    const [files, setFiles] = useState<IFile[]>([])
     const [uploadedFiles, setUploadedFiles] = useState<IFile[]>([]);
     const [filteredFiles, setFilteredFiles] = useState<IFile[]>([]);
-
-    useEffect(() => {
-        api.get<IPost[]>("posts").then((response) => {
-            const postFormatted: IFile[] = response.data.map((post) => {
-                return {
-                    ...post,
-                    id: post._id,
-                    preview: post.url,
-                    readableSize: filesize(post.size),
-                    file: null,
-                    error: false,
-                    uploaded: true,
-                };
-            });
-
-            setUploadedFiles(postFormatted);
-        });
-    }, []);
 
     useEffect(() => {
         return () => {
@@ -79,15 +64,15 @@ const FileProvider: React.FC = ({ children }) => {
     async function getFiles() {
         try {
             const { data } = await api.get('/posts');
-            setUploadedFiles(data);
+            setFiles(data);
         } catch (error) {
-            alert("Ocorreu um erro ao buscar os items");
+            alert(error);
         }
     }
 
     function getFilteredFiles(search: string) {
         setFilteredFiles(
-            uploadedFiles.filter(file => {
+            files.filter(file => {
                 return file.name.toLowerCase().includes(search.toLowerCase())
             })
         );
@@ -100,7 +85,7 @@ const FileProvider: React.FC = ({ children }) => {
                 data.append("file", uploadedFile.file, uploadedFile.name);
             }
 
-            api.post("posts", data, {
+            api.post("/posts", data, {
                 onUploadProgress: (progressEvent) => {
                     let progress: number = Math.round(
                         (progressEvent.loaded * 100) / progressEvent.total
@@ -138,15 +123,13 @@ const FileProvider: React.FC = ({ children }) => {
                 id: uuidv4(),
                 name: file.name,
                 readableSize: filesize(file.size),
-                preview: URL.createObjectURL(file), 
+                preview: URL.createObjectURL(file),
                 progress: 0,
                 uploaded: false,
                 error: false,
                 url: "",
             }));
-
-            // concat é mais performático que ...spread
-            // https://www.malgol.com/how-to-merge-two-arrays-in-javascript/
+            
             setUploadedFiles((state) => state.concat(newUploadedFiles));
             newUploadedFiles.forEach(processUpload);
         },
@@ -159,7 +142,7 @@ const FileProvider: React.FC = ({ children }) => {
     }, []);
 
     return (
-        <FilesContext.Provider value={{ uploadedFiles, deleteFile, handleUpload, filteredFiles, getFilteredFiles, getFiles }}>
+        <FilesContext.Provider value={{ files, uploadedFiles, deleteFile, handleUpload, filteredFiles, getFilteredFiles, getFiles, setUploadedFiles }}>
             {children}
         </FilesContext.Provider>
     );

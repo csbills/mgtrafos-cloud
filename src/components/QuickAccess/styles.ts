@@ -24,6 +24,7 @@ export const FileCard = styled.div`
     height: 12rem;
 
     background: var(--shape);
+    cursor: pointer;
 
     img {
         margin: 2rem 3rem;
