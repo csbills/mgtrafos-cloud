@@ -33,21 +33,21 @@ export interface IFile {
 }
 
 interface IFileContextData {
-    files: IFile[];
+    files: IPost[];
     uploadedFiles: IFile[];
     deleteFile(id: string): void;
     handleUpload(file: any): void;
     getFiles: () => Promise<void>,
     getFilteredFiles: (search: string) => void,
-    filteredFiles: IFile[],
+    filteredFiles: IPost[],
     setUploadedFiles: (files: IFile[]) => void,
 }
 const FilesContext = createContext<IFileContextData>({} as IFileContextData);
 
 const FileProvider: React.FC = ({ children }) => {
-    const [files, setFiles] = useState<IFile[]>([])
+    const [files, setFiles] = useState<IPost[]>([])
     const [uploadedFiles, setUploadedFiles] = useState<IFile[]>([]);
-    const [filteredFiles, setFilteredFiles] = useState<IFile[]>([]);
+    const [filteredFiles, setFilteredFiles] = useState<IPost[]>([]);
 
     useEffect(() => {
         return () => {

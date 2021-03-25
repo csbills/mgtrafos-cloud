@@ -14,7 +14,7 @@ export const Content = styled.div`
     margin: 2rem;
     background: #FFF;
     border-radius: 0.25rem;
-    padding: 1.5rem;
+    padding: 1.5rem;    
 `;
 
 const dragActive = css`
@@ -38,7 +38,7 @@ export const DropContainer = styled.div<IDropContainer>`
     transition: height 0.2s ease;
 
     ${(props: any) => props.isDragActive && dragActive};
-    ${(props: any) => props.isDragReject && dragActive};
+    ${(props: any) => props.isDragReject && dragReject};
 `;
 
 const messageColors = {

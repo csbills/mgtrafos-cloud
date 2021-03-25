@@ -22,7 +22,7 @@ export function Content() {
     return (
         <Container>
             <Header onOpenNewUploadModal={handleOpenNewUploadModal} />
-            <QuickAccess />
+            
             <FilesList /> 
             <UploadModal 
                 isOpen={isNewUploadModalOpen}

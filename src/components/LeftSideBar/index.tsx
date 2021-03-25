@@ -1,68 +1,76 @@
-import { Container, ButtonPlus, Folder } from './styles';
+import { Container, ButtonPlus, Folder, StorageCount, Menu } from './styles';
 
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logo-black.png';
 import folderSVG from '../../assets/folderSideBar.svg';
 import plusSVG from '../../assets/plus.svg';
 import clockSVG from '../../assets/clock.svg';
-import arrowRightSVG from '../../assets/arrow-right.svg';
 import trashSVG from '../../assets/trash.svg';
+import { useFiles } from '../../contexts/FilesContext';
+import { useEffect, useState } from 'react';
 
 export function LeftSideBar() {
+    const { files } = useFiles();
+    const [countStorageUsed, setCountStorageUsed] = useState(0);
+
+    useEffect(() => {
+        let sumStorageUsed: number = 0;
+        files.map((file) => {
+            sumStorageUsed = file.size + sumStorageUsed;
+        })
+
+        //transformando o size para GB
+        setCountStorageUsed(Math.floor(((sumStorageUsed / 1024) / 1024) / 1024));
+    }, [files]);
+
     return (
         <Container>
-            <img src={logo} alt="logo" />
-            <ButtonPlus>
-                <img src={plusSVG} alt="plus" />
-                <span>Create New</span>
-            </ButtonPlus>
+            <div>
+                <img src={logo} alt="logo"/>
+                <ButtonPlus>
+                    <img src={plusSVG} alt="plus" />
+                    <span>Criar Pasta</span>
+                </ButtonPlus>
 
-            <span>Files</span>
+                <span>Pastas</span>
 
-            <Folder>
-                <img src={arrowRightSVG} alt="folder" width="12" height="12" />
-                <img src={folderSVG} alt="folder" width="16" height="16" />
-                <span>My Files</span>
-            </Folder>
+                <Folder>
+                    <img src={folderSVG} alt="folder" width="16" height="16" />
+                    <span>My Files</span>
+                </Folder>
 
-            <Folder>
-                <img src={arrowRightSVG} alt="folder" width="12" height="12" />
-                <img src={folderSVG} alt="folder" width="16" height="16" />
-                <span>Analytics</span>
-            </Folder>
+                <Folder>
+                    <img src={folderSVG} alt="folder" width="16" height="16" />
+                    <span>Analytics</span>
+                </Folder>
 
-            <Folder>
-                <img src={arrowRightSVG} alt="folder" width="12" height="12" />
-                <img src={folderSVG} alt="folder" width="16" height="16" />
-                <span>Marketing</span>
-            </Folder>
+                <Folder>
+                    <img src={folderSVG} alt="folder" width="16" height="16" />
+                    <span>Marketing</span>
+                </Folder>
 
-            <Folder>
-                <img src={arrowRightSVG} alt="folder" width="12" height="12" />
-                <img src={folderSVG} alt="folder" width="16" height="16" />
-                <span>Templates</span>
-            </Folder>
+                <Menu>
+                    <span>Menu</span>
 
-            <Folder>
-                <img src={arrowRightSVG} alt="folder" width="12" height="12" />
-                <img src={folderSVG} alt="folder" width="16" height="16" />
-                <span>Projects</span>
-            </Folder>
+                    <Folder>
+                        <img src={clockSVG} alt="folder" width="16" height="16" />
+                        <span>Atividades recentes</span>
+                    </Folder>
 
-            <Folder>
-                <img src={arrowRightSVG} alt="folder" width="12" height="12" />
-                <img src={folderSVG} alt="folder" width="16" height="16" />
-                <span>Syndicode</span>
-            </Folder>
+                    <Folder>
+                        <img src={trashSVG} alt="folder" width="16" height="16" />
+                        <span>Lixeira</span>
+                    </Folder>
+                </Menu>
+            </div>
 
-            <Folder>
-                <img src={clockSVG} alt="folder" width="16" height="16" />
-                <span>Atividades recentes</span>
-            </Folder>
-
-            <Folder>
-                <img src={trashSVG} alt="folder" width="16" height="16" />
-                <span>Lixeira</span>
-            </Folder>
+            <StorageCount>
+                <span>{countStorageUsed} GB of 50</span>
+                <div>
+                    <div style={{ width: `${countStorageUsed + 1 * 80}%` }} />
+                </div>
+                <span>Individual</span>
+                <span>Conta</span>
+            </StorageCount>
 
         </Container>
     )

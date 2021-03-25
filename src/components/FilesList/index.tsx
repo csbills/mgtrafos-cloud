@@ -8,6 +8,7 @@ import xls from '../../assets/xls.svg';
 import jpg from '../../assets/jpg.svg';
 import png from '../../assets/png.svg';
 
+import filesize from "filesize";
 
 export interface IFile {
     id: string;
@@ -19,6 +20,15 @@ export interface IFile {
     progress?: number;
     error?: boolean;
     url: string;
+}
+
+interface IPost {
+    _id: string;
+    name: string;
+    size: number;
+    key: string;
+    url: string;
+    createdAt: string;
 }
 
 export function FilesList() {
@@ -63,12 +73,16 @@ export function FilesList() {
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredFiles.map((file: IFile) => (
-                        <tr key={file.id}>
-                            <td><img src={`${getIcon(file.name)}`} alt="file-icon" /> {file.name}</td>
-                            <td>{file.readableSize}</td>
+                    {filteredFiles.map((file: IPost) => (
+                        <tr key={file._id}>
+                            <td><img src={`${getIcon(file.name)}`} alt="file-icon" />
+                                <a href={file.url} target="_blank">
+                                    {file.name}
+                                </a>
+                            </td>
+                            <td>{filesize(file.size)}</td>
                             <td>{getExtension(file.name)}</td>
-                            <td>10/08/2011 14:45</td>
+                            <td>{file.createdAt}</td>
                             <td>...</td>
                         </tr>
                     ))}

@@ -4,6 +4,7 @@ export const Container = styled.div`
     display: flex;
     flex-direction:column;
     align-items: center;
+    justify-content: space-between;
 
     background: var(--shape);
 
@@ -27,6 +28,8 @@ export const Folder = styled.div`
     padding: 0;
     margin-top: 1rem;
 
+    opacity: 70%;
+
     span {
         font-weight: 400;
     }
@@ -45,7 +48,7 @@ export const ButtonPlus = styled.button`
     justify-content: flex-start;
     align-items: center;
 
-    background: #44BCFF;
+    background: #2072CF;
     color: #FFF;
 
     border: 0;
@@ -67,4 +70,45 @@ export const ButtonPlus = styled.button`
     span {
         margin-left: 1rem;
     }
+`;
+
+export const StorageCount = styled.div`
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 0.75rem;
+    
+    width: 100%;
+
+    span:first-child {
+        opacity: 50%;
+        margin-bottom: 0.75rem;
+    }
+
+    span:last-child{
+        font-size: 0.75rem;
+        opacity: 0.5;
+    }
+
+    div {
+        width: 100%;
+        height: 2px;
+        border-radius: 4px;
+        background-color: #dcdde0;
+        position: relative;
+        margin-bottom: 0.75rem;
+
+
+        div {
+            width: 10%;
+            height: 2px;
+            border-radius: 4px;
+            background-color: #2072CF;
+        }
+    }
+`;
+
+export const Menu = styled.div`
+    margin-top: 2.5rem;
 `;

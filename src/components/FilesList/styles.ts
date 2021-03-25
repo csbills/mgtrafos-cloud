@@ -41,4 +41,9 @@ export const Container = styled.div`
             height: 2rem;
             margin-right: 1rem;
         }  
+
+        a { 
+            text-decoration: none;
+            color: rgba(0,0,0,0.75);
+        }
 `;

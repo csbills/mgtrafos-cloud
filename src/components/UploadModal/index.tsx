@@ -37,13 +37,23 @@ export function UploadModal({ isOpen, onRequestClose }: NewUploadModalProps) {
         isDragActive,
         isDragReject,
     } = useDropzone({
-        accept: ["image/jpeg", "image/pjpeg", "image/png", "image/gif"],
+        accept: [
+            "image/jpeg",
+            "image/pjpeg",
+            "image/png",
+            "image/gif",
+            "application/vnd.ms-excel",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "application/vnd.ms-powerpoint",
+            "application/pdf",
+            "application/msword"
+        ],
         onDrop,
     });
 
     const renderDragMessage = useCallback(() => {
         if (!isDragActive) {
-            return <UploadMessage>Arraste imagens aqui...</UploadMessage>;
+            return <UploadMessage>Arraste seus arquivos aqui...</UploadMessage>;
         }
 
         if (isDragReject) {
@@ -54,7 +64,7 @@ export function UploadModal({ isOpen, onRequestClose }: NewUploadModalProps) {
             );
         }
 
-        return <UploadMessage type="success">Solte as imagens aqui</UploadMessage>;
+        return <UploadMessage type="success">Solte os arquivos aqui</UploadMessage>;
     }, [isDragActive, isDragReject]);
 
     return (

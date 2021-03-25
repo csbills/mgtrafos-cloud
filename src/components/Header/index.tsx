@@ -35,10 +35,12 @@ export function Header({ onOpenNewUploadModal }: HeaderProps) {
             <ProfileContainer>
                 <button onClick={onOpenNewUploadModal}>Enviar arquivo</button>
                 <img src={bellSVG} alt="bell" width="24" height="24" />
-                <ProfileImage>
+                <ProfileImage>                  
                     <img src={profileImg} alt="profile" />
                 </ProfileImage>
-                <img src={downRight} alt="downRight" width="12" height="12" />
+                <button>
+                    <img src={downRight} alt="downRight" width="12" height="12" />
+                </button>                
             </ProfileContainer>
         </Container>
     )

@@ -6,6 +6,7 @@ export const Container = styled.div`
     align-items: center;
     grid-template-columns: 5fr 1fr;
     padding: 0 2rem; 
+
 `;
 
 export const ProfileContainer = styled.div`
@@ -30,6 +31,13 @@ export const ProfileContainer = styled.div`
         &:hover {
             transform: scale(1.01); 
         }
+    }
+
+    button:last-child {
+        width: auto;
+        font-size: 1px;
+        padding: 0;
+        border: none;
     }
 
 `;

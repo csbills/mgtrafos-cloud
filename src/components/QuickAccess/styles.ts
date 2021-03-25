@@ -16,6 +16,7 @@ export const FileCard = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 
     margin: 0 2rem;
     border-radius: 0.5rem;
@@ -30,6 +31,11 @@ export const FileCard = styled.div`
         margin: 2rem 3rem;
         width: 75px;
         height: 75px;
+    }
+
+    a {
+        text-decoration:none;
+        color: rgba(0,0,0,0.75);
     }
 `;
 

@@ -2,7 +2,7 @@ import React, { FormEvent, useContext, useState } from 'react';
 
 import { Form, Container } from '../styles/login';
 
-import logo from '../assets/logo.png';
+import logo from '../assets/logo-black.png';
 
 import { AuthContext } from '../contexts/AuthContext';
 

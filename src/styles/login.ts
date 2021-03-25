@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
     height: 100vh;
-    background-image: radial-gradient(circle, #ff7a00, #ff812c, #ff8945, #ff915b, #fe9a6f, #fd9871, #fc9574, #fb9376, #fc846a, #fe745f, #fe6356, #ff4e4e);
+    background: var(--shape);
     display:flex;
     justify-content:center;
     align-items:center;
@@ -12,10 +12,10 @@ export const Container = styled.div`
 export const Form = styled.form`
     width: 650px;
     height: 650px;
-    background: rgba(255,255,255,0.3);
+    background: #ffff;
 
     padding: 0 1.25rem;
-    border-radius: 0.25rem;
+    border-radius: 0.5rem;
 
     display: flex;
     flex-direction:column;
@@ -48,7 +48,7 @@ export const Form = styled.form`
     button {
         height: 4rem;
         width: 550px;
-        background: #009D52;
+        background: #2072CF;
         border: 0;
         border-radius: 0.25rem;
         font-size: 1.5rem;
