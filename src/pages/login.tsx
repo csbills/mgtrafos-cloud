@@ -28,7 +28,7 @@ export default function Login() {
 
                 <input
                     type="text"
-                    placeholder="Login"
+                    placeholder="Email"
                     value={email}
                     onChange={event => setEmail(event.target.value)}
                 />

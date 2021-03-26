@@ -66,7 +66,7 @@ export function LeftSideBar() {
             <StorageCount>
                 <span>{countStorageUsed} GB of 50</span>
                 <div>
-                    <div style={{ width: `${countStorageUsed + 1 * 80}%` }} />
+                    <div style={{ width: `${countStorageUsed * 2}%` }} />
                 </div>
                 <span>Individual</span>
                 <span>Conta</span>
