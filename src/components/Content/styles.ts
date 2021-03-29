@@ -5,4 +5,35 @@ export const Container = styled.div`
     flex-direction: column;
     padding: 0 2rem;
     overflow:auto;
+
+    .modeDisplay {
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        margin: 1rem 2rem;
+
+        span {
+            font-weight: 700;             
+        }
+
+        button {
+            border-radius: 50%;
+            padding: 0.5rem;
+            margin-left: 1rem;
+            border: none;
+            background:transparent;
+
+            &:first-child {
+                background: var(--shape);
+            }
+        }
+
+        img {
+            width: 16px;
+            height: 16px;
+        }
+    }
 `;
+

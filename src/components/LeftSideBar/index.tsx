@@ -1,7 +1,7 @@
 import { Container, ButtonPlus, Folder, StorageCount, Menu } from './styles';
 
 import logo from '../../assets/logo-black.png';
-import folderSVG from '../../assets/folderSideBar.svg';
+import folderSVG from '../../assets/folder-blue.svg';
 import plusSVG from '../../assets/plus.svg';
 import clockSVG from '../../assets/clock.svg';
 import trashSVG from '../../assets/trash.svg';
@@ -41,7 +41,7 @@ export function LeftSideBar() {
                 <Folder>
                     <img src={folderSVG} alt="folder" width="16" height="16" />
                     <span>Analytics</span>
-                </Folder>
+                </Folder>        
 
                 <Folder>
                     <img src={folderSVG} alt="folder" width="16" height="16" />
@@ -64,9 +64,9 @@ export function LeftSideBar() {
             </div>
 
             <StorageCount>
-                <span>{countStorageUsed} GB of 50</span>
+                <span><strong>{countStorageUsed + 20} GB </strong> of 50</span>
                 <div>
-                    <div style={{ width: `${countStorageUsed * 2}%` }} />
+                    <div style={{ width: `${countStorageUsed + 40 * 2}%` }} />
                 </div>
                 <span>Individual</span>
                 <span>Conta</span>

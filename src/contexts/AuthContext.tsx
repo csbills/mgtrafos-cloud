@@ -14,7 +14,8 @@ interface AuthProviderProps {
 interface AuthContextData {
     authenticated: boolean,
     loading: boolean,
-    handleLogin: (login: LoginInput) => Promise<void>
+    handleLogin: (login: LoginInput) => Promise<void>,
+    handleLogout: () => void,
 }
 
 export const AuthContext = createContext<AuthContextData>(
@@ -45,6 +46,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
             const { data } = response;
             if (data) {
                 localStorage.setItem('@mgtrafos/token', JSON.stringify(data.token));
+                localStorage.setItem('@mgtrafos/user_name', JSON.stringify(data.user.name));
+                localStorage.setItem('@mgtrafos/user_id', JSON.stringify(data.user._id));
+                localStorage.setItem('@mgtrafos/user_email', JSON.stringify(data.user.email));
                 api.defaults.headers.Authorization = `Bearer ${data.token}`;
                 setAuthenticated(true);
                 history.push('/');
@@ -55,8 +59,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
         });
     }
 
+    function handleLogout() {
+        localStorage.removeItem('@mgtrafos/token');
+        setAuthenticated(true);
+        history.push('/login');
+    }
+
     return (
-        <AuthContext.Provider value={{ authenticated, handleLogin, loading }}>
+        <AuthContext.Provider value={{ authenticated, handleLogin, handleLogout, loading }}>
             {children}
         </AuthContext.Provider>
     )

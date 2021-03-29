@@ -1,17 +1,12 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-    margin: 1rem 2rem;
+    margin: 0 2rem;
 
     table {
         width: 100%;
         border-spacing: 0;
         text-align: center;
-    }
-
-    tbody {
-        overflow: auto;
-        max-width:auto;
     }
 
     th {
@@ -20,8 +15,15 @@ export const Container = styled.div`
             line-height: 1.5rem;
             padding: 2rem 0;
 
-            &:first-child {
+            &:nth-child(2) {
                 text-align: left;
+            }
+        }
+
+        tr{
+
+            &:hover {
+                background: rgba(0,0,0,0.015);
             }
         }
 
@@ -31,14 +33,24 @@ export const Container = styled.div`
             color: var(--text-body);
 
             &:first-child {
-                text-align: left;
+                text-align: center;
                 padding: 1rem 0rem;
+            }
+
+            &:nth-child(2) {
+                text-align: left;
+            }
+
+            button {
+                border: 0;
+                background: transparent;
+                font-size: 2rem;
             }
         } 
 
         img {
-            width: 2rem;
-            height: 2rem;
+            width: 2.5rem;
+            height: 2.5rem;
             margin-right: 1rem;
         }  
 

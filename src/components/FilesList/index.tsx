@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Container } from './styles'
 import { useFiles } from '../../contexts/FilesContext';
+import { Dropdown } from '../Dropdown';
 
 
 import pdf from '../../assets/pdf.svg';
@@ -33,6 +34,7 @@ interface IPost {
 
 export function FilesList() {
     const { getFiles, filteredFiles, uploadedFiles } = useFiles();
+    const [openDropdown, setOpenDropdown] = useState(false);
 
     useEffect(() => {
         getFiles();
@@ -42,9 +44,8 @@ export function FilesList() {
         return fileName.split('.').pop();
     }
 
-
     function getIcon(fileName: string) {
-        const ext = getExtension(fileName);
+        const ext = getExtension(fileName)?.toLowerCase();
 
         switch (ext) {
             case 'pdf':
@@ -56,15 +57,22 @@ export function FilesList() {
             case 'jpg':
                 return jpg;
 
+            case 'jpeg':
+                return jpg;
+
             case 'png':
                 return png;
         }
     }
     return (
         <Container>
+            {openDropdown && (
+                <Dropdown />
+            )}
             <table>
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Nome</th>
                         <th>Tamanho</th>
                         <th>Tipo</th>
@@ -75,15 +83,20 @@ export function FilesList() {
                 <tbody>
                     {filteredFiles.map((file: IPost) => (
                         <tr key={file._id}>
-                            <td><img src={`${getIcon(file.name)}`} alt="file-icon" />
-                                <a href={file.url} target="_blank">
+                            <td><img src={`${getIcon(file.name)}`} alt="file-icon" /></td>
+                            <td>
+                                <a
+                                    href={file.url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
                                     {file.name}
                                 </a>
                             </td>
                             <td>{filesize(file.size)}</td>
                             <td>{getExtension(file.name)}</td>
                             <td>{file.createdAt}</td>
-                            <td>...</td>
+                            <td><button onClick={() => setOpenDropdown(!openDropdown)}>...</button></td>
                         </tr>
                     ))}
                 </tbody>

@@ -1,29 +1,61 @@
-import { Container, FileCard, Title } from './styles';
+import { Container, FileCard } from './styles';
+import { Dropdown } from '../Dropdown';
 
-import xlsSVG from '../../assets/xls.svg';
-import pdfSVG from '../../assets/pdf.svg';
-import jpgSVG from '../../assets/jpg.svg';
-import docSVG from '../../assets/doc.svg';
-import folderSVG from '../../assets/folder.svg';
+import pdf from '../../assets/pdf.svg';
+import xls from '../../assets/xls.svg';
+import jpg from '../../assets/jpg.svg';
+import png from '../../assets/png.svg';
+
+import filesize from 'filesize';
+
 import { useFiles } from '../../contexts/FilesContext';
+import { useState } from 'react';
 
 export function QuickAccess() {
-    const { files } = useFiles();
+    const { filteredFiles } = useFiles();
+    const [openDropdown, setOpenDropdown] = useState(false);
+
+    function getExtension(fileName: string) {
+        return fileName.split('.').pop();
+    }
+
+    function getName(fileName: string) {
+        return fileName.split('.' + getExtension(fileName));
+    }
+
+    function getIcon(fileName: string) {
+        const ext = getExtension(fileName)?.toLowerCase();
+
+        switch (ext) {
+            case 'pdf':
+                return pdf;
+
+            case 'xlsx':
+                return xls;
+
+            case 'jpg':
+                return jpg;
+
+            case 'jpeg':
+                return jpg;
+
+            case 'png':
+                return png;
+        }
+    }
+
     return (
-        <>
-            <Title>My Files</Title>
-
-            <Container>
-                {files.map((file) => (
-                    <FileCard key={file._id}>
-                        <a href={file.url} target="_blank">
-                            <img src={pdfSVG} alt="fileCard" />
-                            <span>{file.name}</span>
-                        </a>
-                    </FileCard>
-                ))}
-            </Container>
-        </>
-
+        <Container>
+            {openDropdown && (
+                <Dropdown />
+            )}
+            {filteredFiles.map((file) => (
+                <FileCard onClick={() => setOpenDropdown(!openDropdown)}>
+                    <img src={`${getIcon(file.name)}`} alt="fileCard" />
+                    <span>{getName(file.name)}</span>
+                    <span>{filesize(file.size)}</span>
+                </FileCard>
+            ))}
+        </Container>
     )
 }

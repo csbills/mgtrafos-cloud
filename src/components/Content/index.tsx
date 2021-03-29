@@ -6,11 +6,15 @@ import { UploadModal } from '../../components/UploadModal';
 import { useState } from 'react';
 import { useFiles } from '../../contexts/FilesContext';
 
+import listSVG from '../../assets/list.svg';
+import gridSVG from '../../assets/grid.svg';
+
 export function Content() {
     const [isNewUploadModalOpen, setIsNewUploadModalOpen] = useState(false);
     const { setUploadedFiles } = useFiles();
+    const [isList, setIsList] = useState(true);
 
-    function handleOpenNewUploadModal(){
+    function handleOpenNewUploadModal() {
         setIsNewUploadModalOpen(true);
     }
 
@@ -22,12 +26,29 @@ export function Content() {
     return (
         <Container>
             <Header onOpenNewUploadModal={handleOpenNewUploadModal} />
-            
-            <FilesList /> 
-            <UploadModal 
+
+            <div className="modeDisplay">
+                <span>My Files</span>
+                <div>
+                    <button onClick={() => setIsList(true)} className="active">
+                        <img src={listSVG} alt="List" />
+                    </button>
+
+                    <button onClick={() => setIsList(false)}>
+                        <img src={gridSVG} alt="Grid" />
+                    </button>
+
+
+                </div>
+
+            </div>
+
+            {isList ? <FilesList /> : <QuickAccess />}
+
+            <UploadModal
                 isOpen={isNewUploadModalOpen}
                 onRequestClose={handleCloseNewUploadModal}
-            />              
+            />
         </Container>
     )
 }

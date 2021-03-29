@@ -19,7 +19,7 @@ export const ProfileContainer = styled.div`
 
 
     button {
-        padding: 0.5rem 2rem;
+        padding: 0.5rem 1rem;
         border: 1px solid black;
         background: transparent;
         border-radius: 0.25rem;
@@ -39,7 +39,6 @@ export const ProfileContainer = styled.div`
         padding: 0;
         border: none;
     }
-
 `;
 
 export const ProfileImage = styled.div`
@@ -54,7 +53,7 @@ export const ProfileImage = styled.div`
 `;
 
 export const InputContainer = styled.div`
-    width: 90%;
+    width: 100%;
     height: 3rem;
     
     padding: 0 2rem;
@@ -65,6 +64,7 @@ export const InputContainer = styled.div`
     background: var(--shape);
     border-radius: 0.5rem;
     border: 0;
+    margin-right: 5rem;
 
     
 

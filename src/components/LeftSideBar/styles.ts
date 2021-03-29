@@ -28,7 +28,9 @@ export const Folder = styled.div`
     padding: 0;
     margin-top: 1rem;
 
-    opacity: 70%;
+    cursor: pointer;
+
+    opacity: 60%;
 
     span {
         font-weight: 400;
@@ -36,6 +38,10 @@ export const Folder = styled.div`
 
     img {
         margin-right: 1rem;
+    }
+
+    &:hover {
+        opacity: 100%;
     }
 `;
 
@@ -48,7 +54,7 @@ export const ButtonPlus = styled.button`
     justify-content: flex-start;
     align-items: center;
 
-    background: #2072CF;
+    background: var(--blue);
     color: #FFF;
 
     border: 0;
@@ -104,7 +110,7 @@ export const StorageCount = styled.div`
             width: 10%;
             height: 2px;
             border-radius: 4px;
-            background-color: #2072CF;
+            background-color: var(--blue);
         }
     }
 `;

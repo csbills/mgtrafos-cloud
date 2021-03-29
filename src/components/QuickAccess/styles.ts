@@ -1,15 +1,16 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-    display: flex;
-    flex-direction:row;
-    justify-content: flex-start;
-    align-items: center;
-`;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin: 1rem 2rem;
+    justify-content:center;
+    row-gap: 1.5rem;
+    column-gap: 1.5rem;
 
-export const Title = styled.h3`
-    margin: 0 2rem;
-    margin-bottom: 1rem;
+    @media (max-width: 1600px) { 
+        grid-template-columns: repeat(4, 1fr);
+    }
 `;
 
 export const FileCard = styled.div`
@@ -17,25 +18,35 @@ export const FileCard = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
-    margin: 0 2rem;
     border-radius: 0.5rem;
 
     width: 12rem;
     height: 12rem;
 
     background: var(--shape);
-    cursor: pointer;
 
-    img {
-        margin: 2rem 3rem;
-        width: 75px;
-        height: 75px;
+    transition: transform 0.3s;
+
+    span {
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+
+        &:last-child {
+            margin-bottom: -0.5rem;
+            font-size: 0.75rem;
+            opacity: 70%;
+        }
     }
 
-    a {
-        text-decoration:none;
-        color: rgba(0,0,0,0.75);
+    img {
+        width: 75px;
+        height: 75px;
+        margin-bottom: 2rem;
+    }
+
+    &:hover {
+        transform: translateY(-3%);
+        filter: brightness(0.98);
     }
 `;
 
