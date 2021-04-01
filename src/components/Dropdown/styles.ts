@@ -25,8 +25,8 @@ export const MenuItem = styled.button`
     transition: filter 0.2s;
 
     img {
-        width: 24px;
-        height: 24px;
+        width: 1.25rem;
+        height: 1.25rem;
     }
 
     span {

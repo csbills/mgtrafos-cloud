@@ -1,5 +1,4 @@
 import { Container, ButtonPlus, Folder, StorageCount, Menu } from './styles';
-
 import logo from '../../assets/logo-black.png';
 import folderSVG from '../../assets/folder-blue.svg';
 import plusSVG from '../../assets/plus.svg';
@@ -7,46 +6,76 @@ import clockSVG from '../../assets/clock.svg';
 import trashSVG from '../../assets/trash.svg';
 import { useFiles } from '../../contexts/FilesContext';
 import { useEffect, useState } from 'react';
+import api from '../../services/api';
+
+export interface IFolder {
+    _id: string,
+    name: string,
+    user_id: string,
+    createdAt: string,
+}
 
 export function LeftSideBar() {
     const { files } = useFiles();
     const [countStorageUsed, setCountStorageUsed] = useState(0);
+    const [folders, setFolders] = useState<IFolder[]>([]);
+    const [openFormFolder, setOpenFormFolder] = useState(false);
+    const [inputFolderName, setInputFolderName] = useState('');
 
     useEffect(() => {
         let sumStorageUsed: number = 0;
         files.map((file) => {
             sumStorageUsed = file.size + sumStorageUsed;
         })
-
         //transformando o size para GB
         setCountStorageUsed(Math.floor(((sumStorageUsed / 1024) / 1024) / 1024));
     }, [files]);
 
+    useEffect(() => {
+        getFolders();
+    }, []);
+
+    async function getFolders() {
+        const { data } = await api.get('/folders');
+        setFolders(data);
+    }
+
+    async function handleCreateNewFolder() {
+        await api.post('/folders', {
+            name: inputFolderName,
+        }).then(response => {
+            setFolders([...folders, {
+                _id: response.data._id,
+                name: response.data.name,
+                user_id: response.data.user_id,
+                createdAt: response.data.createdAt,
+            }])
+        });
+    }
+
     return (
         <Container>
             <div>
-                <img src={logo} alt="logo"/>
-                <ButtonPlus>
+                <img src={logo} alt="logo" />
+
+                <div>
+                    <input type="text" placeholder="Nome da pasta" onChange={(e) => setInputFolderName(e.target.value)} />
+                    <button type="button" onClick={handleCreateNewFolder}>Criar</button>
+                </div>
+
+                <ButtonPlus onClick={() => setOpenFormFolder(true)}>
                     <img src={plusSVG} alt="plus" />
                     <span>Criar Pasta</span>
                 </ButtonPlus>
 
                 <span>Pastas</span>
 
-                <Folder>
-                    <img src={folderSVG} alt="folder" width="16" height="16" />
-                    <span>My Files</span>
-                </Folder>
-
-                <Folder>
-                    <img src={folderSVG} alt="folder" width="16" height="16" />
-                    <span>Analytics</span>
-                </Folder>        
-
-                <Folder>
-                    <img src={folderSVG} alt="folder" width="16" height="16" />
-                    <span>Marketing</span>
-                </Folder>
+                {folders.map((folder: IFolder) => (
+                    <Folder key={folder._id}>
+                        <img src={folderSVG} alt="folder" width="16" height="16" />
+                        <span>{folder.name}</span>
+                    </Folder>
+                ))}
 
                 <Menu>
                     <span>Menu</span>
@@ -64,9 +93,9 @@ export function LeftSideBar() {
             </div>
 
             <StorageCount>
-                <span><strong>{countStorageUsed + 20} GB </strong> of 50</span>
+                <span><strong>{countStorageUsed} GB </strong> of 50</span>
                 <div>
-                    <div style={{ width: `${countStorageUsed + 40 * 2}%` }} />
+                    <div style={{ width: `${countStorageUsed * 2}%` }} />
                 </div>
                 <span>Individual</span>
                 <span>Conta</span>
