@@ -30,6 +30,7 @@ export interface IFile {
     progress?: number;
     error?: boolean;
     url: string;
+    folder_Id: string,
 }
 
 interface IFileContextData {
@@ -64,6 +65,7 @@ const FileProvider: React.FC = ({ children }) => {
     async function getFiles() {
         try {
             const { data } = await api.get('/posts');
+            console.log(data);
             setFiles(data);
         } catch (error) {
             alert(error);
@@ -83,6 +85,7 @@ const FileProvider: React.FC = ({ children }) => {
             const data = new FormData();
             if (uploadedFile.file) {
                 data.append("file", uploadedFile.file, uploadedFile.name);
+                data.append("folder_id", uploadedFile.folder_Id);
             }
 
             api.post("/posts", data, {
@@ -97,6 +100,7 @@ const FileProvider: React.FC = ({ children }) => {
                 },
             }).then((response) => {
                 console.log(`A imagem ${uploadedFile.name} j√° foi enviada para o servidor!`);
+                console.log(response);
 
                 updateFile(uploadedFile.id, {
                     uploaded: true,
@@ -128,6 +132,7 @@ const FileProvider: React.FC = ({ children }) => {
                 uploaded: false,
                 error: false,
                 url: "",
+                folder_Id: "6065aedcbf0bdc18306cf33d",
             }));
             
             setUploadedFiles((state) => state.concat(newUploadedFiles));

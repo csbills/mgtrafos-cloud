@@ -138,7 +138,7 @@ export const GlobalStyle = createGlobalStyle`
     .dropdown {
         position: absolute;
         top: 5.25rem;
-        width: 300px;
+        width: 175px;
         transform: translateX(200%);
         background: var(--background);  
         padding: 1rem 0;
@@ -153,7 +153,6 @@ export const GlobalStyle = createGlobalStyle`
         display: flex;
         align-items: center;
         padding: 0.5rem;
-        margin-bottom: 1rem;
         background: transparent;
         border: 0;
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Container } from './styles'
 import { useFiles } from '../../contexts/FilesContext';
 import { Dropdown } from '../Dropdown';
+import { format } from 'date-fns';
 
 
 import pdf from '../../assets/pdf.svg';
@@ -39,6 +40,12 @@ export function FilesList() {
     useEffect(() => {
         getFiles();
     }, [uploadedFiles]);
+
+    function getFormattedDate(fileDate: string) {
+        const dateFormatted = fileDate.replace('T', " ").split('.')[0];
+        return dateFormatted;
+
+    }
 
     function getExtension(fileName: string) {
         return fileName.split('.').pop();
@@ -95,7 +102,7 @@ export function FilesList() {
                             </td>
                             <td>{filesize(file.size)}</td>
                             <td>{getExtension(file.name)}</td>
-                            <td>{file.createdAt}</td>
+                            <td>{getFormattedDate(file.createdAt)}</td>
                             <td><button onClick={() => setOpenDropdown(!openDropdown)}>...</button></td>
                         </tr>
                     ))}

@@ -44,13 +44,16 @@ export function LeftSideBar() {
         await api.post('/folders', {
             name: inputFolderName,
         }).then(response => {
-            setFolders([...folders, {
+            setFolders([...folders,
+            {
                 _id: response.data._id,
                 name: response.data.name,
                 user_id: response.data.user_id,
                 createdAt: response.data.createdAt,
-            }])
+            }
+            ])
         });
+        getFolders();
     }
 
     return (
@@ -58,15 +61,17 @@ export function LeftSideBar() {
             <div>
                 <img src={logo} alt="logo" />
 
-                <div>
-                    <input type="text" placeholder="Nome da pasta" onChange={(e) => setInputFolderName(e.target.value)} />
-                    <button type="button" onClick={handleCreateNewFolder}>Criar</button>
-                </div>
-
-                <ButtonPlus onClick={() => setOpenFormFolder(true)}>
+                <ButtonPlus onClick={() => setOpenFormFolder(!openFormFolder)}>
                     <img src={plusSVG} alt="plus" />
                     <span>Criar Pasta</span>
                 </ButtonPlus>
+
+                {openFormFolder && (
+                    <div>
+                        <input type="text" placeholder="Nome da pasta" onChange={(e) => setInputFolderName(e.target.value)} />
+                        <button type="button" onClick={handleCreateNewFolder}>Criar</button>
+                    </div>
+                )}
 
                 <span>Pastas</span>
 

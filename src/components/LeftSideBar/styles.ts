@@ -25,7 +25,6 @@ export const Folder = styled.div`
     justify-content: flex-start;
     align-items: center;
 
-    padding: 0;
     margin-top: 1rem;
 
     cursor: pointer;
@@ -42,6 +41,7 @@ export const Folder = styled.div`
 
     &:hover {
         opacity: 100%;
+        background: #ffff;
     }
 `;
 
