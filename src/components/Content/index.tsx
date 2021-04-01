@@ -37,10 +37,7 @@ export function Content() {
                     <button onClick={() => setIsList(false)}>
                         <img src={gridSVG} alt="Grid" />
                     </button>
-
-
                 </div>
-
             </div>
 
             {isList ? <FilesList /> : <QuickAccess />}

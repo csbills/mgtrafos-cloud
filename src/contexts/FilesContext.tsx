@@ -20,6 +20,13 @@ export interface IPost {
     createdAt: string,
 }
 
+export interface IFolder {
+    _id: string,
+    name: string,
+    user: string,
+    createdAt: string,
+}
+
 export interface IFile {
     id: string;
     name: string;
@@ -46,7 +53,7 @@ interface IFileContextData {
 const FilesContext = createContext<IFileContextData>({} as IFileContextData);
 
 const FileProvider: React.FC = ({ children }) => {
-    const [files, setFiles] = useState<IPost[]>([])
+    const [files, setFiles] = useState<IPost[]>([]);
     const [uploadedFiles, setUploadedFiles] = useState<IFile[]>([]);
     const [filteredFiles, setFilteredFiles] = useState<IPost[]>([]);
 
@@ -64,7 +71,7 @@ const FileProvider: React.FC = ({ children }) => {
 
     async function getFiles() {
         try {
-            const { data } = await api.get('/posts');
+            const { data } = await api.get(`posts/${'6065aedcbf0bdc18306cf33d'}`);
             console.log(data);
             setFiles(data);
         } catch (error) {
@@ -132,9 +139,9 @@ const FileProvider: React.FC = ({ children }) => {
                 uploaded: false,
                 error: false,
                 url: "",
-                folder_Id: "6065aedcbf0bdc18306cf33d",
+                folder_Id: '6065d1bc5770f220982b3a15',
             }));
-            
+
             setUploadedFiles((state) => state.concat(newUploadedFiles));
             newUploadedFiles.forEach(processUpload);
         },
@@ -147,7 +154,16 @@ const FileProvider: React.FC = ({ children }) => {
     }, []);
 
     return (
-        <FilesContext.Provider value={{ files, uploadedFiles, deleteFile, handleUpload, filteredFiles, getFilteredFiles, getFiles, setUploadedFiles }}>
+        <FilesContext.Provider value={{
+            files,
+            uploadedFiles,
+            deleteFile,
+            handleUpload,
+            filteredFiles,
+            getFilteredFiles,
+            getFiles,
+            setUploadedFiles,
+        }}>
             {children}
         </FilesContext.Provider>
     );

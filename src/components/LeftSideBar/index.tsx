@@ -1,4 +1,4 @@
-import { Container, ButtonPlus, Folder, StorageCount, Menu } from './styles';
+import { Container, ButtonPlus, Folder, StorageCount, Menu, NewFolderForm } from './styles';
 import logo from '../../assets/logo-black.png';
 import folderSVG from '../../assets/folder-blue.svg';
 import plusSVG from '../../assets/plus.svg';
@@ -11,7 +11,7 @@ import api from '../../services/api';
 export interface IFolder {
     _id: string,
     name: string,
-    user_id: string,
+    user: string,
     createdAt: string,
 }
 
@@ -48,7 +48,7 @@ export function LeftSideBar() {
             {
                 _id: response.data._id,
                 name: response.data.name,
-                user_id: response.data.user_id,
+                user: response.data.user_id,
                 createdAt: response.data.createdAt,
             }
             ])
@@ -67,10 +67,10 @@ export function LeftSideBar() {
                 </ButtonPlus>
 
                 {openFormFolder && (
-                    <div>
+                    <NewFolderForm>
                         <input type="text" placeholder="Nome da pasta" onChange={(e) => setInputFolderName(e.target.value)} />
                         <button type="button" onClick={handleCreateNewFolder}>Criar</button>
-                    </div>
+                    </NewFolderForm>
                 )}
 
                 <span>Pastas</span>

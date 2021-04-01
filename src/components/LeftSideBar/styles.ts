@@ -8,7 +8,7 @@ export const Container = styled.div`
 
     background: var(--shape);
 
-    padding: 2rem 1rem;
+    padding: 2rem 0rem;
 
     span {
         width: 100%;
@@ -25,7 +25,7 @@ export const Folder = styled.div`
     justify-content: flex-start;
     align-items: center;
 
-    margin-top: 1rem;
+    margin-top: 0.5rem;
 
     cursor: pointer;
 
@@ -46,7 +46,7 @@ export const Folder = styled.div`
 `;
 
 export const ButtonPlus = styled.button`
-    width: auto;
+    width: 100%;
     height: 2.5rem;
 
     display: flex;
@@ -65,7 +65,7 @@ export const ButtonPlus = styled.button`
     padding: 0 1.5rem;
     letter-spacing: 1px;
 
-    margin-bottom: 3rem;
+    margin-bottom: 0.5rem;
     margin-top: 3rem;
 
     img {
@@ -84,6 +84,7 @@ export const StorageCount = styled.div`
     align-items: center;
     justify-content: flex-start;
     padding: 0 0.75rem;
+    margin-top: 4rem;
     
     width: 100%;
 
@@ -117,4 +118,12 @@ export const StorageCount = styled.div`
 
 export const Menu = styled.div`
     margin-top: 2.5rem;
+`;
+
+export const NewFolderForm = styled.div`
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background: var(--background);
+
 `;
