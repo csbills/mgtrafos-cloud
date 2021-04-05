@@ -49,6 +49,7 @@ interface IFileContextData {
     getFilteredFiles: (search: string) => void,
     filteredFiles: IPost[],
     setUploadedFiles: (files: IFile[]) => void,
+    setFolderId: (folderId: string) => void,
 }
 const FilesContext = createContext<IFileContextData>({} as IFileContextData);
 
@@ -56,12 +57,18 @@ const FileProvider: React.FC = ({ children }) => {
     const [files, setFiles] = useState<IPost[]>([]);
     const [uploadedFiles, setUploadedFiles] = useState<IFile[]>([]);
     const [filteredFiles, setFilteredFiles] = useState<IPost[]>([]);
+    const [folderId, setFolderId] = useState();
 
     useEffect(() => {
         return () => {
             uploadedFiles.forEach((file) => URL.revokeObjectURL(file.preview));
         };
     });
+
+    useEffect(() => {
+        console.log(folderId);
+        getFiles();
+    }, [folderId]);
 
     const updateFile = useCallback((id, data) => {
         setUploadedFiles((state) =>
@@ -71,7 +78,7 @@ const FileProvider: React.FC = ({ children }) => {
 
     async function getFiles() {
         try {
-            const { data } = await api.get(`posts/${'6065aedcbf0bdc18306cf33d'}`);
+            const { data } = await api.get(`posts/${folderId}`);
             console.log(data);
             setFiles(data);
         } catch (error) {
@@ -139,11 +146,11 @@ const FileProvider: React.FC = ({ children }) => {
                 uploaded: false,
                 error: false,
                 url: "",
-                folder_Id: '6065d1bc5770f220982b3a15',
+                folder_Id: folderId,
             }));
 
             setUploadedFiles((state) => state.concat(newUploadedFiles));
-            newUploadedFiles.forEach(processUpload);
+            newUploadedFiles.forEach(processUpload);            
         },
         [processUpload]
     );
@@ -163,6 +170,7 @@ const FileProvider: React.FC = ({ children }) => {
             getFilteredFiles,
             getFiles,
             setUploadedFiles,
+            setFolderId,
         }}>
             {children}
         </FilesContext.Provider>
