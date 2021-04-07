@@ -37,19 +37,19 @@ export interface IFile {
     progress?: number;
     error?: boolean;
     url: string;
-    folder_Id: string,
 }
 
 interface IFileContextData {
     files: IPost[];
+    folder?: IFolder;
     uploadedFiles: IFile[];
     deleteFile(id: string): void;
     handleUpload(file: any): void;
-    getFiles: () => Promise<void>,
-    getFilteredFiles: (search: string) => void,
-    filteredFiles: IPost[],
-    setUploadedFiles: (files: IFile[]) => void,
-    setFolderId: (folderId: string) => void,
+    getFiles: () => Promise<void>;
+    getFilteredFiles: (search: string) => void;
+    filteredFiles: IPost[];
+    setUploadedFiles: (files: IFile[]) => void;
+    setFolder: (folder: IFolder) => void;
 }
 const FilesContext = createContext<IFileContextData>({} as IFileContextData);
 
@@ -57,7 +57,7 @@ const FileProvider: React.FC = ({ children }) => {
     const [files, setFiles] = useState<IPost[]>([]);
     const [uploadedFiles, setUploadedFiles] = useState<IFile[]>([]);
     const [filteredFiles, setFilteredFiles] = useState<IPost[]>([]);
-    const [folderId, setFolderId] = useState();
+    const [folder, setFolder] = useState<IFolder>();
 
     useEffect(() => {
         return () => {
@@ -66,9 +66,8 @@ const FileProvider: React.FC = ({ children }) => {
     });
 
     useEffect(() => {
-        console.log(folderId);
         getFiles();
-    }, [folderId]);
+    }, [folder?._id]);
 
     const updateFile = useCallback((id, data) => {
         setUploadedFiles((state) =>
@@ -78,8 +77,7 @@ const FileProvider: React.FC = ({ children }) => {
 
     async function getFiles() {
         try {
-            const { data } = await api.get(`posts/${folderId}`);
-            console.log(data);
+            const { data } = await api.get(`posts/${folder?._id}`);
             setFiles(data);
         } catch (error) {
             alert(error);
@@ -94,12 +92,14 @@ const FileProvider: React.FC = ({ children }) => {
         );
     }
 
-    const processUpload = useCallback(
+    const processUpload =
         (uploadedFile: IFile) => {
             const data = new FormData();
             if (uploadedFile.file) {
                 data.append("file", uploadedFile.file, uploadedFile.name);
-                data.append("folder_id", uploadedFile.folder_Id);
+                if (folder) {
+                    data.append("folder_id", folder._id);
+                }
             }
 
             api.post("/posts", data, {
@@ -130,30 +130,26 @@ const FileProvider: React.FC = ({ children }) => {
                         error: true,
                     });
                 });
-        },
-        [updateFile]
-    );
+        }
 
-    const handleUpload = useCallback(
-        (files: File[]) => {
-            const newUploadedFiles: IFile[] = files.map((file: File) => ({
-                file,
-                id: uuidv4(),
-                name: file.name,
-                readableSize: filesize(file.size),
-                preview: URL.createObjectURL(file),
-                progress: 0,
-                uploaded: false,
-                error: false,
-                url: "",
-                folder_Id: folderId,
-            }));
+    const handleUpload = (files: File[]) => {
+        const newUploadedFiles: IFile[] = files.map((file: File) => ({
+            file,
+            id: uuidv4(),
+            name: file.name,
+            readableSize: filesize(file.size),
+            preview: URL.createObjectURL(file),
+            progress: 0,
+            uploaded: false,
+            error: false,
+            url: "",
+        }));
 
-            setUploadedFiles((state) => state.concat(newUploadedFiles));
-            newUploadedFiles.forEach(processUpload);            
-        },
-        [processUpload]
-    );
+        setUploadedFiles((state) => state.concat(newUploadedFiles));
+        newUploadedFiles.forEach(processUpload);
+    }
+
+
 
     const deleteFile = useCallback((id: string) => {
         api.delete(`posts/${id}`);
@@ -170,7 +166,8 @@ const FileProvider: React.FC = ({ children }) => {
             getFilteredFiles,
             getFiles,
             setUploadedFiles,
-            setFolderId,
+            setFolder,
+            folder,
         }}>
             {children}
         </FilesContext.Provider>

@@ -11,7 +11,7 @@ import gridSVG from '../../assets/grid.svg';
 
 export function Content() {
     const [isNewUploadModalOpen, setIsNewUploadModalOpen] = useState(false);
-    const { setUploadedFiles } = useFiles();
+    const { setUploadedFiles, folder } = useFiles();
     const [isList, setIsList] = useState(true);
 
     function handleOpenNewUploadModal() {
@@ -28,7 +28,7 @@ export function Content() {
             <Header onOpenNewUploadModal={handleOpenNewUploadModal} />
 
             <div className="modeDisplay">
-                <span>My Files</span>
+                {folder ? <span>{folder.name}</span> : <span>   </span>}
                 <div>
                     <button onClick={() => setIsList(true)} className="active">
                         <img src={listSVG} alt="List" />

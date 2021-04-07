@@ -16,7 +16,7 @@ export interface IFolder {
 }
 
 export function LeftSideBar() {
-    const { files, setFolderId } = useFiles();
+    const { files, setFolder } = useFiles();
     const [countStorageUsed, setCountStorageUsed] = useState(0);
     const [folders, setFolders] = useState<IFolder[]>([]);
     const [openFormFolder, setOpenFormFolder] = useState(false);
@@ -76,7 +76,7 @@ export function LeftSideBar() {
                 <span>Pastas</span>
 
                 {folders.map((folder: IFolder) => (
-                    <Folder key={folder._id} onClick={() => setFolderId(folder._id)}>                        
+                    <Folder key={folder._id} onClick={() => setFolder(folder)}>                        
                         <img src={folderSVG} alt="folder" width="16" height="16" />
                         <span>{folder.name}</span>
                     </Folder>
