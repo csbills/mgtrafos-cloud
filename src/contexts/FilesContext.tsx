@@ -77,8 +77,11 @@ const FileProvider: React.FC = ({ children }) => {
 
     async function getFiles() {
         try {
-            const { data } = await api.get(`posts/${folder?._id}`);
-            setFiles(data);
+            if (folder) {
+                const { data } = await api.get(`posts/${folder._id}`);
+                setFiles(data);
+            }
+
         } catch (error) {
             alert(error);
         }

@@ -36,8 +36,15 @@ export function LeftSideBar() {
     }, []);
 
     async function getFolders() {
-        const { data } = await api.get('/folders');
-        setFolders(data);
+        try {
+            const { data } = await api.get('/folders');
+            if (data) {
+                setFolders(data);
+                setFolder(data[0]);
+            }
+        } catch (erro) {
+            console.log(erro);
+        }
     }
 
     async function handleCreateNewFolder() {
@@ -76,7 +83,7 @@ export function LeftSideBar() {
                 <span>Pastas</span>
 
                 {folders.map((folder: IFolder) => (
-                    <Folder key={folder._id} onClick={() => setFolder(folder)}>                        
+                    <Folder key={folder._id} onClick={() => setFolder(folder)}>
                         <img src={folderSVG} alt="folder" width="16" height="16" />
                         <span>{folder.name}</span>
                     </Folder>
