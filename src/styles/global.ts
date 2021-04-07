@@ -138,13 +138,25 @@ export const GlobalStyle = createGlobalStyle`
     .dropdown {
         position: absolute;
         top: 5.25rem;
-        width: 175px;
+        width: 250px;
         transform: translateX(200%);
         background: var(--background);  
         padding: 1rem 0;
         overflow: hidden;
         border: 1px solid #000;
         border-radius: 0.5rem;
+    }
+
+    .profileDropdown {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        margin-bottom: 3rem;
+    }
+
+    .profileDropdown span:last-child {
+        font-size: 0.85rem;
     }
 
     .menu-item {

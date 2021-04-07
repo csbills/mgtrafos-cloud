@@ -12,6 +12,7 @@ import searchSVG from '../../assets/search.svg';
 import downRight from '../../assets/down-arrow.svg';
 import logoutSVG from '../../assets/logout.svg';
 import { AuthContext } from '../../contexts/AuthContext';
+import { stringify } from 'node:querystring';
 
 interface HeaderProps {
     onOpenNewUploadModal: () => void;
@@ -50,7 +51,14 @@ export function Header({ onOpenNewUploadModal }: HeaderProps) {
                     </button>
 
                     {openMenu && (
-                        <div className="dropdown">                           
+                        <div className="dropdown">
+                            <div className="profileDropdown">
+                                <ProfileImage>
+                                    <img src={profileImg} alt="profile" />
+                                </ProfileImage>
+                                <span>{localStorage.getItem('@mgtrafos/user_name')?.split('"')}</span>
+                                <span>{localStorage.getItem('@mgtrafos/user_email')?.split('"')}</span>
+                            </div>
                             <button className="menu-item" onClick={handleLogout}>
                                 <img src={logoutSVG} alt="Sair" />
                                 <span>Logout</span>
