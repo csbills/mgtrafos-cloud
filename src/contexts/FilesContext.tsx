@@ -112,7 +112,6 @@ const FileProvider: React.FC = ({ children }) => {
                     );
 
                     console.log(`A imagem ${uploadedFile.name} est√° ${progress}% carregada... `);
-
                     updateFile(uploadedFile.id, { progress });
                 },
             }).then((response) => {
