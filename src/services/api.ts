@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export default axios.create({
-  baseURL: 'https://mgtrafos-cloud-backend.herokuapp.com',
+  baseURL: process.env.API_URL,
 });
