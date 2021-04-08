@@ -8,7 +8,6 @@ import {
 } from './styles';
 
 import profileImg from '../../assets/capturar.png';
-import bellSVG from '../../assets/bell.svg';
 import searchSVG from '../../assets/search.svg';
 import downRight from '../../assets/down-arrow.svg';
 import logoutSVG from '../../assets/logout.svg';

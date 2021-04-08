@@ -5,16 +5,17 @@ import { Form, Container } from '../styles/login';
 import logo from '../assets/logo-black.png';
 
 import { AuthContext } from '../contexts/AuthContext';
+import Loader from 'react-loader-spinner';
 
 export default function Login() {
-    const { handleLogin } = useContext(AuthContext);
-    
+    const { handleLogin, loading } = useContext(AuthContext);
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     async function handleSubmit(event: FormEvent) {
         event.preventDefault();
-        
+
         await handleLogin({
             email: email,
             password: password,
@@ -38,9 +39,20 @@ export default function Login() {
                     value={password}
                     onChange={event => setPassword(event.target.value)}
                 />
-                <button type="submit">Entrar</button>
+                {loading ? (
+                    <button type="submit">
+                        <Loader
+                            type="TailSpin"
+                            color="#FFF"
+                            height={40}
+                            width={40}
+                        />
+                    </button>
+                ) : (
+                    <button type="submit">Entrar</button>
+                )}
             </Form>
-        </Container>
+        </Container >
 
     )
 }
