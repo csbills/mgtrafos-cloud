@@ -24,7 +24,7 @@ export const AuthContext = createContext<AuthContextData>(
 
 export function AuthProvider({ children }: AuthProviderProps) {
     const [authenticated, setAuthenticated] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const token = localStorage.getItem('@mgtrafos/token');
