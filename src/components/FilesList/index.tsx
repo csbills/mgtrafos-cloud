@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Container } from './styles'
+import { Container, ContainerTable } from './styles'
 import { useFiles } from '../../contexts/FilesContext';
 import { Dropdown } from '../Dropdown';
-import { format } from 'date-fns';
 
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 import pdf from '../../assets/pdf.svg';
 import xls from '../../assets/xls.svg';
@@ -11,6 +11,7 @@ import jpg from '../../assets/jpg.svg';
 import png from '../../assets/png.svg';
 
 import filesize from "filesize";
+import Loader from 'react-loader-spinner';
 
 export interface IFile {
     id: string;
@@ -34,7 +35,7 @@ interface IPost {
 }
 
 export function FilesList() {
-    const { getFiles, filteredFiles, uploadedFiles } = useFiles();
+    const { getFiles, filteredFiles, uploadedFiles, isLoading, setIsLoading } = useFiles();
     const [openDropdown, setOpenDropdown] = useState(false);
 
     useEffect(() => {
@@ -76,38 +77,49 @@ export function FilesList() {
             {openDropdown && (
                 <Dropdown />
             )}
-            <table>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Nome</th>
-                        <th>Tamanho</th>
-                        <th>Tipo</th>
-                        <th>Data de inclusão</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredFiles.map((file: IPost) => (
-                        <tr key={file._id}>
-                            <td><img src={`${getIcon(file.name)}`} alt="file-icon" /></td>
-                            <td>
-                                <a
-                                    href={file.url}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    {file.name}
-                                </a>
-                            </td>
-                            <td>{filesize(file.size)}</td>
-                            <td>{getExtension(file.name)}</td>
-                            <td>{getFormattedDate(file.createdAt)}</td>
-                            <td><button onClick={() => setOpenDropdown(!openDropdown)}>...</button></td>
+            {isLoading ? (
+                <ContainerTable>
+                    <Loader
+                        type="TailSpin"
+                        color="#4B88FF"
+                        height={75}
+                        width={75}                       
+                    />
+                </ContainerTable>
+            ) : (
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Nome</th>
+                            <th>Tamanho</th>
+                            <th>Tipo</th>
+                            <th>Data de inclusão</th>
+                            <th>Ação</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {filteredFiles.map((file: IPost) => (
+                            <tr key={file._id}>
+                                <td><img src={`${getIcon(file.name)}`} alt="file-icon" /></td>
+                                <td>
+                                    <a
+                                        href={file.url}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        {file.name}
+                                    </a>
+                                </td>
+                                <td>{filesize(file.size)}</td>
+                                <td>{getExtension(file.name)}</td>
+                                <td>{getFormattedDate(file.createdAt)}</td>
+                                <td><button onClick={() => setOpenDropdown(!openDropdown)}>...</button></td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            )}
         </Container>
     )
 }

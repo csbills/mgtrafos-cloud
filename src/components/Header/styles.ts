@@ -65,7 +65,7 @@ export const ProfileInfo = styled.div`
     border-left: 2px solid rgba(0,0,0,0.5);
 
     span: first-child {
-        font-size: 1rem;
+        font-size: 0.95rem;
         margin-bottom: 0.25rem;
     }
 

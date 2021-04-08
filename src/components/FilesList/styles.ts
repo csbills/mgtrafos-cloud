@@ -59,3 +59,10 @@ export const Container = styled.div`
             color: rgba(0,0,0,0.75);
         }
 `;
+
+export const ContainerTable = styled.div`
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 600px;
+`;

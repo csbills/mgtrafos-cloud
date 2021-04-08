@@ -42,6 +42,7 @@ export interface IFile {
 interface IFileContextData {
     files: IPost[];
     folder?: IFolder;
+    isLoading: boolean;
     uploadedFiles: IFile[];
     deleteFile(id: string): void;
     handleUpload(file: any): void;
@@ -50,6 +51,7 @@ interface IFileContextData {
     filteredFiles: IPost[];
     setUploadedFiles: (files: IFile[]) => void;
     setFolder: (folder: IFolder) => void;
+    setIsLoading?:() => void;
 }
 const FilesContext = createContext<IFileContextData>({} as IFileContextData);
 
@@ -58,6 +60,7 @@ const FileProvider: React.FC = ({ children }) => {
     const [uploadedFiles, setUploadedFiles] = useState<IFile[]>([]);
     const [filteredFiles, setFilteredFiles] = useState<IPost[]>([]);
     const [folder, setFolder] = useState<IFolder>();
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         return () => {
@@ -77,9 +80,14 @@ const FileProvider: React.FC = ({ children }) => {
 
     async function getFiles() {
         try {
+            setIsLoading(true);
             if (folder) {
-                const { data } = await api.get(`posts/${folder._id}`);
-                setFiles(data);
+                await api.get(`posts/${folder._id}`).then((response) => {
+                    const { data } = response;
+                    setFiles(data);
+                    setIsLoading(false);
+                });
+                
             }
 
         } catch (error) {
@@ -170,6 +178,7 @@ const FileProvider: React.FC = ({ children }) => {
             setUploadedFiles,
             setFolder,
             folder,
+            isLoading,
         }}>
             {children}
         </FilesContext.Provider>
