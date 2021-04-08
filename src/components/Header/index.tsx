@@ -4,6 +4,7 @@ import { useFiles } from '../../contexts/FilesContext';
 import {
     InputContainer,
     ProfileImage,
+    ProfileInfo,
 } from './styles';
 
 import profileImg from '../../assets/capturar.png';
@@ -12,7 +13,6 @@ import searchSVG from '../../assets/search.svg';
 import downRight from '../../assets/down-arrow.svg';
 import logoutSVG from '../../assets/logout.svg';
 import { AuthContext } from '../../contexts/AuthContext';
-import { stringify } from 'node:querystring';
 
 interface HeaderProps {
     onOpenNewUploadModal: () => void;
@@ -38,9 +38,12 @@ export function Header({ onOpenNewUploadModal }: HeaderProps) {
                         <input placeholder="Pesquise aqui" onChange={e => setSearch(e.target.value)} />
                     </InputContainer>
 
-                    <button onClick={onOpenNewUploadModal} className="btn_upload">Enviar arquivo</button>
+                    <button onClick={onOpenNewUploadModal} className="btn_upload">Enviar arquivos</button>
 
-                    <img src={bellSVG} alt="bell" width="24" height="24" />
+                    <ProfileInfo>
+                        <span>{localStorage.getItem('@mgtrafos/user_name')?.split('"')}</span>
+                        <span>{localStorage.getItem('@mgtrafos/user_email')?.split('"')}</span>
+                    </ProfileInfo>
 
                     <ProfileImage>
                         <img src={profileImg} alt="profile" />
@@ -51,14 +54,7 @@ export function Header({ onOpenNewUploadModal }: HeaderProps) {
                     </button>
 
                     {openMenu && (
-                        <div className="dropdown">
-                            <div className="profileDropdown">
-                                <ProfileImage>
-                                    <img src={profileImg} alt="profile" />
-                                </ProfileImage>
-                                <span>{localStorage.getItem('@mgtrafos/user_name')?.split('"')}</span>
-                                <span>{localStorage.getItem('@mgtrafos/user_email')?.split('"')}</span>
-                            </div>
+                        <div className="dropdown"> 
                             <button className="menu-item" onClick={handleLogout}>
                                 <img src={logoutSVG} alt="Sair" />
                                 <span>Logout</span>

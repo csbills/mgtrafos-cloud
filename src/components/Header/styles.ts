@@ -19,12 +19,12 @@ export const ProfileContainer = styled.div`
 
 
     button {
-        padding: 0.5rem 1rem;
+        padding: 0.5rem 2rem;
         border: 1px solid black;
         background: transparent;
         border-radius: 0.25rem;
         margin-right: 2rem;
-        width: 175px;
+        width: 185px;
 
         transition: transform 0.2s;
 
@@ -46,14 +46,39 @@ export const ProfileImage = styled.div`
         border-radius: 1.5rem;
         width: 50px;
         height: 50px;
-        margin-left: 3rem;
-        margin-right: 1rem;
+        margin-left: auto;
+        margin-right: 0.5rem;
     }
 
 `;
 
+export const ProfileInfo = styled.div`
+    display: flex;
+    flex-direction:column;
+    align-itens: center;
+    justify-content: center;
+    text-align: right;
+    margin-right: 1rem;
+    padding: 0.01rem 0rem;
+    padding-left: 2rem;
+
+    border-left: 2px solid rgba(0,0,0,0.5);
+
+    span: first-child {
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+    }
+
+    
+    span: last-child {
+        font-size: .85rem;
+        opacity: 0.75;
+    }
+`;
+
+
 export const InputContainer = styled.div`
-    width: 100%;
+    width: 70%;
     height: 3rem;
     
     padding: 0 2rem;
@@ -64,7 +89,7 @@ export const InputContainer = styled.div`
     background: var(--shape);
     border-radius: 0.5rem;
     border: 0;
-    margin-right: 5rem;
+    margin-right: 2rem;
 
     
 

@@ -2,14 +2,22 @@ import styled from "styled-components";
 
 export const Container = styled.div`
     position: absolute;
-    width: 200px;
-    top: 20rem;
-    transform: translateX(650%);
-    background: var(--background);  
-    padding: 1rem 0;
-    overflow: hidden;
-    border: 1px solid #000;
+    width: 100%;
+    max-width:16.875rem;
+    z-index: 100;
+    left: -100px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: #181B23;
+    padding: 1rem 0;    
     border-radius: 0.5rem;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 2px 0px;
+
+    margin: 0.1rem 0;
+
+    -webkit-animation: slide-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	        animation: slide-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 `;
 
 export const MenuItem = styled.button`
@@ -22,18 +30,19 @@ export const MenuItem = styled.button`
     background: transparent;
     border: 0;
 
-    transition: filter 0.2s;
+    transition: background 0.2s;
 
     img {
-        width: 1.25rem;
-        height: 1.25rem;
+        width: 20px;
+        height: 20px;
     }
 
     span {
         font-weight: 500;
+        color: #FFF;
     }
 
     :hover {
-        background: var(--shape);
+        background: #353646;
     }
 `;

@@ -14,6 +14,10 @@ export const Container = styled.div`
 
         margin: 1rem 2rem;
 
+        .active {
+            background: var(--shape);
+        }
+
         span {
             font-weight: 700;             
         }
@@ -24,10 +28,6 @@ export const Container = styled.div`
             margin-left: 1rem;
             border: none;
             background:transparent;
-
-            &:first-child {
-                background: var(--shape);
-            }
         }
 
         img {

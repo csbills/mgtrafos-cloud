@@ -30,13 +30,18 @@ export function Content() {
             <div className="modeDisplay">
                 {folder ? <span>{folder.name}</span> : <span>   </span>}
                 <div>
-                    <button onClick={() => setIsList(true)} className="active">
+                    {isList ? (<button onClick={() => setIsList(true)} className="active">
                         <img src={listSVG} alt="List" />
-                    </button>
+                    </button>) : (<button onClick={() => setIsList(true)}>
+                        <img src={listSVG} alt="List" />
+                    </button>)}
 
-                    <button onClick={() => setIsList(false)}>
+                    {!isList ? (<button onClick={() => setIsList(false)} className="active">
                         <img src={gridSVG} alt="Grid" />
-                    </button>
+                    </button>) : (<button onClick={() => setIsList(false)}>
+                        <img src={gridSVG} alt="Grid" />
+                    </button>)}
+
                 </div>
             </div>
 

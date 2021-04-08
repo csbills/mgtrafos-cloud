@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
     :root {        
-        --shape: rgba(245,245,245,0.75);
+        --shape: rgba(245,245,245,1);
         --background: #FFF;
         --blue: #4B88FF;
 
@@ -46,6 +46,27 @@ export const GlobalStyle = createGlobalStyle`
     a {
         color: inherit;
         text-decoration: none;
+    }
+
+    @-webkit-keyframes slide-right {
+        0% {
+            -webkit-transform: translateX(0);
+                    transform: translateX(0);
+        }
+        100% {
+            -webkit-transform: translateX(100px);
+                    transform: translateX(100px);
+        }
+        }
+    @keyframes slide-right {
+        0% {
+            -webkit-transform: translateX(0);
+                    transform: translateX(0);
+        }
+        100% {
+            -webkit-transform: translateX(100px);
+                    transform: translateX(100px);
+        }
     }
 
     button {
@@ -138,13 +159,13 @@ export const GlobalStyle = createGlobalStyle`
     .dropdown {
         position: absolute;
         top: 5.25rem;
-        width: 250px;
-        transform: translateX(200%);
+        width: 200px;
+        right: 4rem;
         background: var(--background);  
         padding: 1rem 0;
-        overflow: hidden;
-        border: 1px solid #000;
+        box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 2px 0px;
         border-radius: 0.5rem;
+        z-index: 2;
     }
 
     .profileDropdown {
@@ -153,6 +174,11 @@ export const GlobalStyle = createGlobalStyle`
         justify-content: center;
         flex-direction: column;
         margin-bottom: 3rem;
+    }
+
+    .profileDropdown img {
+        width: 50px;
+        height: 50px;
     }
 
     .profileDropdown span:last-child {
@@ -189,7 +215,7 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     .btn_upload {
-        padding: 0.5rem 1.5rem;
+        padding: 0.5rem 3rem;
         border: 1px solid black;
         background: transparent;
         border-radius: 0.25rem;
