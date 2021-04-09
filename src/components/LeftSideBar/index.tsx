@@ -7,6 +7,7 @@ import trashSVG from '../../assets/trash.svg';
 import { useFiles } from '../../contexts/FilesContext';
 import { useEffect, useState } from 'react';
 import api from '../../services/api';
+import fileSize from 'filesize';
 
 export interface IFolder {
     _id: string,
@@ -28,7 +29,8 @@ export function LeftSideBar() {
             sumStorageUsed = file.size + sumStorageUsed;
         })
         //transformando o size para GB
-        setCountStorageUsed(Math.floor(((sumStorageUsed / 1024) / 1024) / 1024));
+        //setCountStorageUsed(Math.floor(((sumStorageUsed / 1024) / 1024) / 1024));
+        setCountStorageUsed(sumStorageUsed);
     }, [files]);
 
     useEffect(() => {
@@ -76,7 +78,11 @@ export function LeftSideBar() {
                 {openFormFolder && (
                     <NewFolderForm>
                         <input type="text" placeholder="Nome da pasta" onChange={(e) => setInputFolderName(e.target.value)} />
-                        <button type="button" onClick={handleCreateNewFolder}>Criar</button>
+                        <div>                            
+                            <button type="button" onClick={handleCreateNewFolder}>Cancelar</button>
+                            <button type="button" onClick={handleCreateNewFolder}>Criar</button>
+                        </div>
+                        
                     </NewFolderForm>
                 )}
 
@@ -88,8 +94,9 @@ export function LeftSideBar() {
                         <span>{folder.name}</span>
                     </Folder>
                 ))}
+            </div>
 
-                <Menu>
+            {/* <Menu>
                     <span>Menu</span>
 
                     <Folder>
@@ -101,13 +108,13 @@ export function LeftSideBar() {
                         <img src={trashSVG} alt="folder" width="16" height="16" />
                         <span>Lixeira</span>
                     </Folder>
-                </Menu>
-            </div>
+                </Menu> */}
+
 
             <StorageCount>
-                <span><strong>{countStorageUsed} GB </strong> of 50</span>
+                <span><strong>{fileSize(Math.round(countStorageUsed))}   </strong>of 5GB</span>
                 <div>
-                    <div style={{ width: `${countStorageUsed * 2}%` }} />
+                    <div style={{ width: `${(countStorageUsed / 1024) / 1024 / 1024 * 2}%` }} />
                 </div>
                 <span>Individual</span>
                 <span>Conta</span>

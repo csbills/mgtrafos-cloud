@@ -65,7 +65,7 @@ export const ButtonPlus = styled.button`
     padding: 0 1.5rem;
     letter-spacing: 1px;
 
-    margin-bottom: 0.5rem;
+    margin-bottom: 2.5rem;
     margin-top: 3rem;
 
     img {
@@ -125,5 +125,23 @@ export const NewFolderForm = styled.div`
     display: flex;
     flex-direction: column;
     background: var(--background);
+    margin-top: -1rem;
+    width: 12.75rem;
+    height: 4rem;
+    justify-content: center;
+    align-items: center;
 
+    input {
+        height: 2rem;
+        background: #fff;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    button:last-child {
+        background: var(--blue);
+        border: none;
+        font-size: 1rem;
+        padding: 0.3rem;
+    }
 `;

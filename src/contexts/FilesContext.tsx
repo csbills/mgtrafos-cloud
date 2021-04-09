@@ -51,7 +51,7 @@ interface IFileContextData {
     filteredFiles: IPost[];
     setUploadedFiles: (files: IFile[]) => void;
     setFolder: (folder: IFolder) => void;
-    setIsLoading?:() => void;
+    setIsLoading?: () => void;
 }
 const FilesContext = createContext<IFileContextData>({} as IFileContextData);
 
@@ -87,7 +87,7 @@ const FileProvider: React.FC = ({ children }) => {
                     setFiles(data);
                     setIsLoading(false);
                 });
-                
+
             }
 
         } catch (error) {
@@ -161,10 +161,10 @@ const FileProvider: React.FC = ({ children }) => {
 
 
 
-    const deleteFile = useCallback((id: string) => {
-        api.delete(`posts/${id}`);
-        setUploadedFiles((state) => state.filter((file) => file.id !== id));
-    }, []);
+    const deleteFile = ((id: string) => {
+        api.delete(`posts/${id}`).then(() => getFiles());
+        setUploadedFiles((state) => state.filter((file) => file.id !== id));        
+    });
 
     return (
         <FilesContext.Provider value={{

@@ -14,6 +14,10 @@ import { useState } from 'react';
 export function QuickAccess() {
     const { filteredFiles } = useFiles();
     const [openDropdown, setOpenDropdown] = useState(false);
+    const [fileId, setFileId] = useState('');
+    const [fileName, setFileName] = useState('');
+    const [fileSize, setFileSize] = useState('');
+    const [fileUrl, setFileUrl] = useState('');
 
     function getExtension(fileName: string) {
         return fileName.split('.').pop();
@@ -47,10 +51,21 @@ export function QuickAccess() {
     return (
         <Container>
             {openDropdown && (
-                <Dropdown />
+                <Dropdown
+                    id={fileId}
+                    name={fileName}
+                    size={fileSize}
+                    url={fileUrl}
+                />
             )}
             {filteredFiles.map((file) => (
-                <FileCard onClick={() => setOpenDropdown(!openDropdown)}>
+                <FileCard onClick={() => {
+                    setOpenDropdown(!openDropdown);
+                    setFileId(file._id);
+                    setFileName(file.name);
+                    setFileSize(filesize(file.size));
+                    setFileUrl(file.url);
+                }}>
                     <img src={`${getIcon(file.name)}`} alt="fileCard" />
                     <span>{getName(file.name)}</span>
                     <span>{filesize(file.size)}</span>

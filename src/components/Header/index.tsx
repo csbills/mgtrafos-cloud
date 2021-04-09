@@ -56,7 +56,7 @@ export function Header({ onOpenNewUploadModal }: HeaderProps) {
                         <div className="dropdown"> 
                             <button className="menu-item" onClick={handleLogout}>
                                 <img src={logoutSVG} alt="Sair" />
-                                <span>Logout</span>
+                                <span>Sair</span>
                             </button>
                         </div>
                     )}

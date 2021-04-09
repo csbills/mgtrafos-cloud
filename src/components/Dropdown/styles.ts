@@ -14,10 +14,23 @@ export const Container = styled.div`
     border-radius: 0.5rem;
     box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 2px 0px;
 
-    margin: 0.1rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     -webkit-animation: slide-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 	        animation: slide-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+
+    img {
+        margin-bottom: 1rem;
+        margin-top: 2rem;
+    }
+
+    button {
+        padding: 0.5rem;
+        align-self: flex-end;
+        margin-top: -1rem;
+    }
 `;
 
 export const MenuItem = styled.button`
@@ -26,7 +39,7 @@ export const MenuItem = styled.button`
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding: 1rem;
+    padding: 0 1rem;
     background: transparent;
     border: 0;
 
@@ -35,6 +48,7 @@ export const MenuItem = styled.button`
     img {
         width: 20px;
         height: 20px;
+        margin: 1rem;
     }
 
     span {
@@ -45,4 +59,27 @@ export const MenuItem = styled.button`
     :hover {
         background: #353646;
     }
+
+    a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        width: 100%;
+        outline: none;
+    }
+`;
+
+export const Titulo = styled.span`  
+    color: #FFF;
+    word-wrap: break-word;    
+    padding: 0 1rem;  
+`;
+
+export const Subtitulo = styled.span`
+    color: #FFF;
+    word-wrap: break-word;    
+    padding: 0 1rem;
+    font-size: 0.75rem;
+    margin-bottom: 2rem;    
+    opacity: 50%;
 `;

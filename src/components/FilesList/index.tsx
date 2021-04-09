@@ -5,13 +5,13 @@ import { Dropdown } from '../Dropdown';
 
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
+import filesize from "filesize";
+import Loader from 'react-loader-spinner';
+
 import pdf from '../../assets/pdf.svg';
 import xls from '../../assets/xls.svg';
 import jpg from '../../assets/jpg.svg';
 import png from '../../assets/png.svg';
-
-import filesize from "filesize";
-import Loader from 'react-loader-spinner';
 
 export interface IFile {
     id: string;
@@ -35,18 +35,16 @@ interface IPost {
 }
 
 export function FilesList() {
-    const { getFiles, filteredFiles, uploadedFiles, isLoading, setIsLoading } = useFiles();
+    const { getFiles, filteredFiles, uploadedFiles, isLoading } = useFiles();
     const [openDropdown, setOpenDropdown] = useState(false);
+    const [fileId, setFileId] = useState('');
+    const [fileName, setFileName] = useState('');
+    const [fileSize, setFileSize] = useState('');
+    const [fileUrl, setFileUrl] = useState('');
 
     useEffect(() => {
         getFiles();
     }, [uploadedFiles]);
-
-    function getFormattedDate(fileDate: string) {
-        const dateFormatted = fileDate.replace('T', " ").split('.')[0];
-        return dateFormatted;
-
-    }
 
     function getExtension(fileName: string) {
         return fileName.split('.').pop();
@@ -62,6 +60,9 @@ export function FilesList() {
             case 'xlsx':
                 return xls;
 
+            case 'xls':
+                return xls;
+
             case 'jpg':
                 return jpg;
 
@@ -72,10 +73,21 @@ export function FilesList() {
                 return png;
         }
     }
+
+    function getFormattedDate(fileDate: string) {
+        const dateFormatted = fileDate.replace('T', " ").split('.')[0];
+        return dateFormatted;
+    }
+
     return (
         <Container>
             {openDropdown && (
-                <Dropdown />
+                <Dropdown
+                    id={fileId} 
+                    name={fileName} 
+                    size={fileSize}
+                    url={fileUrl}
+                />
             )}
             {isLoading ? (
                 <ContainerTable>
@@ -83,7 +95,7 @@ export function FilesList() {
                         type="TailSpin"
                         color="#4B88FF"
                         height={75}
-                        width={75}                       
+                        width={75}
                     />
                 </ContainerTable>
             ) : (
@@ -114,7 +126,17 @@ export function FilesList() {
                                 <td>{filesize(file.size)}</td>
                                 <td>{getExtension(file.name)}</td>
                                 <td>{getFormattedDate(file.createdAt)}</td>
-                                <td><button onClick={() => setOpenDropdown(!openDropdown)}>...</button></td>
+                                <td>
+                                    <button onClick={() => {
+                                        setOpenDropdown(!openDropdown);
+                                        setFileId(file._id);
+                                        setFileName(file.name);
+                                        setFileSize(filesize(file.size));
+                                        setFileUrl(file.url);
+                                    }}>
+                                    ...
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
