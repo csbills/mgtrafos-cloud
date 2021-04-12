@@ -51,7 +51,7 @@ interface IFileContextData {
     filteredFiles: IPost[];
     setUploadedFiles: (files: IFile[]) => void;
     setFolder: (folder: IFolder) => void;
-    setIsLoading?: () => void;
+    setIsLoading: (aux: boolean) => void;
 }
 const FilesContext = createContext<IFileContextData>({} as IFileContextData);
 
@@ -79,20 +79,19 @@ const FileProvider: React.FC = ({ children }) => {
     }, []);
 
     async function getFiles() {
-        try {
-            setIsLoading(true);
-            if (folder) {
-                await api.get(`posts/${folder._id}`).then((response) => {
-                    const { data } = response;
-                    setFiles(data);
-                    setIsLoading(false);
-                });
-
-            }
-
-        } catch (error) {
-            alert(error);
+        setIsLoading(true);
+        if (folder) {
+            await api.get(`posts/${folder._id}`).then((response) => {
+                const { data } = response;
+                setFiles(data);
+                setIsLoading(false);
+            }).catch(response => {
+                console.log(response);
+                setIsLoading(false);
+            });
         }
+
+        setIsLoading(false);
     }
 
     function getFilteredFiles(search: string) {
@@ -159,11 +158,9 @@ const FileProvider: React.FC = ({ children }) => {
         newUploadedFiles.forEach(processUpload);
     }
 
-
-
     const deleteFile = ((id: string) => {
         api.delete(`posts/${id}`).then(() => getFiles());
-        setUploadedFiles((state) => state.filter((file) => file.id !== id));        
+        setUploadedFiles((state) => state.filter((file) => file.id !== id));
     });
 
     return (
@@ -179,6 +176,7 @@ const FileProvider: React.FC = ({ children }) => {
             setFolder,
             folder,
             isLoading,
+            setIsLoading
         }}>
             {children}
         </FilesContext.Provider>

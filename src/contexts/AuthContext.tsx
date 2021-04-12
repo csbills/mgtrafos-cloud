@@ -27,7 +27,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const token = localStorage.getItem('@mgtrafos/token');
+        const token = sessionStorage.getItem('@mgtrafos/token');
 
         if (token) {
             api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
@@ -45,14 +45,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }).then(response => {
             const { data } = response;
             if (data) {
-                localStorage.setItem('@mgtrafos/token', JSON.stringify(data.token));
-                localStorage.setItem('@mgtrafos/user_name', JSON.stringify(data.user.name));
-                localStorage.setItem('@mgtrafos/user_id', JSON.stringify(data.user._id));
-                localStorage.setItem('@mgtrafos/user_email', JSON.stringify(data.user.email));
-                api.defaults.headers.Authorization = `Bearer ${data.token}`;                
+                sessionStorage.setItem('@mgtrafos/token', JSON.stringify(data.token));
+                sessionStorage.setItem('@mgtrafos/user_name', JSON.stringify(data.user.name));
+                sessionStorage.setItem('@mgtrafos/user_id', JSON.stringify(data.user._id));
+                sessionStorage.setItem('@mgtrafos/user_email', JSON.stringify(data.user.email));
+                api.defaults.headers.Authorization = `Bearer ${data.token}`;               
                 setAuthenticated(true);
-                setLoading(false);
-                history.push('/');
+                setLoading(false);                                
+                history.push('/');                 
             }
         }).catch(error => {
             const msgError = error.response.data.error;
@@ -62,7 +62,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     function handleLogout() {
-        localStorage.removeItem('@mgtrafos/token');
+        sessionStorage.removeItem('@mgtrafos/token');
         setAuthenticated(false);
         history.push('/login');
     }

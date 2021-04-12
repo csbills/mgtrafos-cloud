@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 import { AuthContext } from './contexts/AuthContext';
 
 import Login from './pages/login';
 import Home from './pages/home';
+
 
 function CustomRoute({ isPrivate, ...rest }) {
   const { loading, authenticated } = useContext(AuthContext);
@@ -22,9 +23,11 @@ function CustomRoute({ isPrivate, ...rest }) {
 
 export default function Routes() {
   return (
-    <Switch>
-      <CustomRoute exact path="/login" component={Login} />
-      <CustomRoute isPrivate exact path="/" component={Home} />
-    </Switch>
+    <BrowserRouter>
+      <Switch>
+        <CustomRoute exact path="/login" component={Login} />
+        <CustomRoute isPrivate exact path="/" component={Home} />
+      </Switch>
+    </BrowserRouter>
   );
 }

@@ -83,12 +83,13 @@ export function FilesList() {
         <Container>
             {openDropdown && (
                 <Dropdown
-                    id={fileId} 
-                    name={fileName} 
+                    id={fileId}
+                    name={fileName}
                     size={fileSize}
                     url={fileUrl}
                 />
             )}
+
             {isLoading ? (
                 <ContainerTable>
                     <Loader
@@ -134,7 +135,7 @@ export function FilesList() {
                                         setFileSize(filesize(file.size));
                                         setFileUrl(file.url);
                                     }}>
-                                    ...
+                                        ...
                                     </button>
                                 </td>
                             </tr>
@@ -142,6 +143,6 @@ export function FilesList() {
                     </tbody>
                 </table>
             )}
-        </Container>
+        </Container >
     )
 }
