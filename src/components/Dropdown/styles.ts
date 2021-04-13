@@ -50,6 +50,9 @@ export const MenuItem = styled.button`
         width: 20px;
         height: 20px;
         margin: 1rem;
+
+        max-width: 21px;
+        max-height: 21px;
     }
 
     span {
