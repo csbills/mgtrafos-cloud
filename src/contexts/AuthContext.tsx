@@ -31,14 +31,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         if (token) {
             api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
-            setAuthenticated(true);           
+            setAuthenticated(true);
         }
 
         setLoading(false);
     }, []);
 
     async function handleLogin(loginInput: LoginInput) {
-        setLoading(true);
         await api.post('/authenticate', {
             email: loginInput.email,
             password: loginInput.password,
@@ -49,21 +48,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 sessionStorage.setItem('@mgtrafos/user_name', JSON.stringify(data.user.name));
                 sessionStorage.setItem('@mgtrafos/user_id', JSON.stringify(data.user._id));
                 sessionStorage.setItem('@mgtrafos/user_email', JSON.stringify(data.user.email));
-                api.defaults.headers.Authorization = `Bearer ${data.token}`;               
+                api.defaults.headers.Authorization = `Bearer ${data.token}`;  
                 setAuthenticated(true);
-                setLoading(false);                                
-                history.push('/');                 
-            }
+                history.push('/');
+                window.location.reload();
+            }         
         }).catch(error => {
             const msgError = error.response.data.error;
-            setLoading(false);
             alert(msgError);
         });
+
+        console.log(authenticated);
     }
 
     function handleLogout() {
-        sessionStorage.removeItem('@mgtrafos/token');
         setAuthenticated(false);
+        sessionStorage.removeItem('@mgtrafos/token');
+        api.defaults.headers.Authorization = undefined;
         history.push('/login');
     }
 

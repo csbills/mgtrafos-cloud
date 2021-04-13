@@ -43,6 +43,7 @@ interface IFileContextData {
     files: IPost[];
     folder?: IFolder;
     isLoading: boolean;
+    openDropdown: boolean;
     uploadedFiles: IFile[];
     deleteFile(id: string): void;
     handleUpload(file: any): void;
@@ -52,6 +53,7 @@ interface IFileContextData {
     setUploadedFiles: (files: IFile[]) => void;
     setFolder: (folder: IFolder) => void;
     setIsLoading: (aux: boolean) => void;
+    setOpenDropdown: (aux: boolean) => void;
 }
 const FilesContext = createContext<IFileContextData>({} as IFileContextData);
 
@@ -61,6 +63,7 @@ const FileProvider: React.FC = ({ children }) => {
     const [filteredFiles, setFilteredFiles] = useState<IPost[]>([]);
     const [folder, setFolder] = useState<IFolder>();
     const [isLoading, setIsLoading] = useState(false);
+    const [openDropdown, setOpenDropdown] = useState(false);
 
     useEffect(() => {
         return () => {
@@ -176,7 +179,9 @@ const FileProvider: React.FC = ({ children }) => {
             setFolder,
             folder,
             isLoading,
-            setIsLoading
+            setIsLoading,
+            setOpenDropdown,
+            openDropdown,
         }}>
             {children}
         </FilesContext.Provider>

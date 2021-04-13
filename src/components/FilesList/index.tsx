@@ -35,8 +35,7 @@ interface IPost {
 }
 
 export function FilesList() {
-    const { getFiles, filteredFiles, uploadedFiles, isLoading } = useFiles();
-    const [openDropdown, setOpenDropdown] = useState(false);
+    const { getFiles, filteredFiles, uploadedFiles, isLoading, setOpenDropdown, openDropdown } = useFiles();
     const [fileId, setFileId] = useState('');
     const [fileName, setFileName] = useState('');
     const [fileSize, setFileSize] = useState('');

@@ -6,12 +6,11 @@ import { AuthContext } from './contexts/AuthContext';
 import Login from './pages/login';
 import Home from './pages/home';
 
-
 function CustomRoute({ isPrivate, ...rest }) {
   const { loading, authenticated } = useContext(AuthContext);
 
   if (loading) {
-    return <h1>Loading...</h1>;
+    return <h1>Loading...</h1>
   }
 
   if (isPrivate && !authenticated) {

@@ -42,18 +42,20 @@ export const MenuItem = styled.button`
     padding: 0 1rem;
     background: transparent;
     border: 0;
-
+    margin: 1rem 0;
+    
     transition: background 0.2s;
 
     img {
         width: 20px;
         height: 20px;
-        margin: 1rem;
+        margin: 0rem;
     }
 
     span {
         font-weight: 500;
         color: #FFF;
+        margin-left: 1rem;
     }
 
     :hover {
@@ -71,15 +73,19 @@ export const MenuItem = styled.button`
 
 export const Titulo = styled.span`  
     color: #FFF;
+    width: 100%;
     word-wrap: break-word;    
-    padding: 0 1rem;  
+    padding: 0 1rem; 
+    text-align: left; 
 `;
 
 export const Subtitulo = styled.span`
+    width: 100%;
     color: #FFF;
     word-wrap: break-word;    
     padding: 0 1rem;
     font-size: 0.75rem;
     margin-bottom: 2rem;    
     opacity: 50%;
+    text-align: left; 
 `;
