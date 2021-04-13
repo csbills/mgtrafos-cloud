@@ -49,7 +49,7 @@ export const MenuItem = styled.button`
     img {
         width: 20px;
         height: 20px;
-        margin: 0rem;
+        margin: 1rem;
     }
 
     span {
