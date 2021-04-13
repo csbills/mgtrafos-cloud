@@ -38,6 +38,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }, []);
 
     async function handleLogin(loginInput: LoginInput) {
+        setLoading(true);
         await api.post('/authenticate', {
             email: loginInput.email,
             password: loginInput.password,
@@ -50,15 +51,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 sessionStorage.setItem('@mgtrafos/user_email', JSON.stringify(data.user.email));
                 api.defaults.headers.Authorization = `Bearer ${data.token}`;  
                 setAuthenticated(true);
+                setLoading(false);
                 history.push('/');
                 window.location.reload();
             }         
         }).catch(error => {
             const msgError = error.response.data.error;
             alert(msgError);
+            setLoading(false);
         });
-
-        console.log(authenticated);
     }
 
     function handleLogout() {

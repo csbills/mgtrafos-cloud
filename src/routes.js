@@ -9,15 +9,15 @@ import Home from './pages/home';
 function CustomRoute({ isPrivate, ...rest }) {
   const { loading, authenticated } = useContext(AuthContext);
 
-  if (loading) {
-    return <h1>Loading...</h1>
-  }
+    if (loading){
+      return <h1>Carregando...</h1>
+    }
+    
+    if (isPrivate && !authenticated) {
+      return <Redirect to="/login" />
+    }
 
-  if (isPrivate && !authenticated) {
-    return <Redirect to="/login" />
-  }
-
-  return <Route {...rest} />;
+    return <Route {...rest} />;
 }
 
 export default function Routes() {
