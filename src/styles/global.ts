@@ -228,4 +228,48 @@ export const GlobalStyle = createGlobalStyle`
             border: 1px solid silver; 
         }
     }
+
+    .containerModalFolderCreate {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .containerInput {
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            border: 1px solid #A8A8B3;
+            width: 100%;
+            background-color: var(--shape);
+            border-radius: 4px;
+            margin-bottom: 1rem;
+
+            input {               
+                margin-left: 0.5rem;
+                border: none;
+                outline: none;
+                width: 100%;
+                background-color: var(--shape);
+            }
+        }
+
+        .containerButton {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            width: 100%;
+
+            button {
+                padding: 0.5rem 2rem;
+                margin-left: 0.5rem;
+                border-radius: 4px;
+                border: 0.5px solid #A8A8B3;
+                background: #ffff;
+            }
+        }
+
+        
+    }
 `;

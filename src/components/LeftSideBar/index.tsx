@@ -8,6 +8,10 @@ import { IPost, useFiles } from '../../contexts/FilesContext';
 import { useEffect, useState } from 'react';
 import api from '../../services/api';
 import fileSize from 'filesize';
+import Modal from 'react-modal';
+
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 export interface IFolder {
     _id: string,
@@ -15,6 +19,8 @@ export interface IFolder {
     user: string,
     createdAt: string,
 }
+
+Modal.setAppElement('#root');
 
 export function LeftSideBar() {
     const { files, setFolder, setIsLoading } = useFiles();
@@ -24,25 +30,25 @@ export function LeftSideBar() {
     const [inputFolderName, setInputFolderName] = useState('');
 
     useEffect(() => {
-        getFolders();        
+        getFolders();
     }, []);
 
-     useEffect(() => {
-        getAllFiles();        
+    useEffect(() => {
+        getAllFiles();
     }, [files]);
 
-    async function getAllFiles(){
+    async function getAllFiles() {
         let sumStorageUsed = 0;
         folders.map(async folder => {
             const { data } = await api.get(`posts/${folder._id}`);
-            if (data){    
+            if (data) {
                 data.map((file: IPost) => {
-                    sumStorageUsed += file.size;                                         
+                    sumStorageUsed += file.size;
                 })
             }
 
             setCountStorageUsed(sumStorageUsed);
-        }) 
+        })
     }
 
     async function getFolders() {
@@ -61,6 +67,11 @@ export function LeftSideBar() {
     }
 
     async function handleCreateNewFolder() {
+        if (!inputFolderName) {
+            console.log('nome tem que ser preenchido');
+            return toast.error('Preencha o nome da pasta');
+        }
+
         await api.post('/folders', {
             name: inputFolderName,
         }).then(response => {
@@ -74,10 +85,14 @@ export function LeftSideBar() {
             ])
         });
         getFolders();
+        setOpenFormFolder(false);
+        setInputFolderName('');
+        return toast.success('Pasta criada com sucesso');
     }
 
     return (
         <Container>
+            <ToastContainer />
             <div>
                 <img src={logo} alt="logo" />
 
@@ -87,14 +102,31 @@ export function LeftSideBar() {
                 </ButtonPlus>
 
                 {openFormFolder && (
-                    <NewFolderForm>
-                        <input type="text" placeholder="Nome da pasta" onChange={(e) => setInputFolderName(e.target.value)} />
-                        <div>
-                            <button type="button" onClick={handleCreateNewFolder}>Cancelar</button>
-                            <button type="button" onClick={handleCreateNewFolder}>Criar</button>
+                    <Modal
+                        isOpen={openFormFolder}
+                        onRequestClose={() => setOpenFormFolder(false)}
+                        overlayClassName="react-modal-overlay"
+                        className="react-modal-content"
+                    >
+                        <div className="containerModalFolderCreate">
+                            <div className="containerInput">
+                                <img src={folderSVG} alt="pasta" width="20" height="20" />
+                                <input
+                                    type="text"
+                                    placeholder="Nome da pasta"
+                                    onChange={event => setInputFolderName(event.target.value)} />
+                            </div>
+                            <div className="containerButton">
+                                <button onClick={() => setOpenFormFolder(false)}>Cancelar</button>
+                                <button
+                                    style={{ background: "#30E383", color: "#ffff", borderColor: "#30E383" }}
+                                    onClick={handleCreateNewFolder}>
+                                    Criar
+                                </button>
+                            </div>
                         </div>
 
-                    </NewFolderForm>
+                    </Modal>
                 )}
 
                 <span>Pastas</span>
@@ -103,6 +135,9 @@ export function LeftSideBar() {
                     <Folder key={folder._id} onClick={() => setFolder(folder)}>
                         <img src={folderSVG} alt="folder" width="16" height="16" />
                         <span>{folder.name}</span>
+                        {/* <div>
+                            <img src={trashSVG} alt="deletar" width="12" height="12" />
+                        </div> */}
                     </Folder>
                 ))}
             </div>
@@ -123,7 +158,7 @@ export function LeftSideBar() {
 
 
             <StorageCount>
-                <span><strong>{fileSize(Math.round(countStorageUsed))} </strong>of 5GB</span>                
+                <span><strong>{fileSize(Math.round(countStorageUsed))} </strong>of 5GB</span>
                 <div>
                     <div style={{ width: `${(countStorageUsed / 1024) / 1024 / 1024 * 20}%` }} />
                 </div>
