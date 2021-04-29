@@ -1,4 +1,4 @@
-import { Container, ButtonPlus, Folder, StorageCount, Menu, NewFolderForm } from './styles';
+import { Container, ButtonPlus, Folder, StorageCount } from './styles';
 import logo from '../../assets/logo-black.png';
 import folderSVG from '../../assets/folder-blue.svg';
 import plusSVG from '../../assets/plus.svg';
@@ -23,7 +23,7 @@ export interface IFolder {
 Modal.setAppElement('#root');
 
 export function LeftSideBar() {
-    const { files, setFolder, setIsLoading } = useFiles();
+    const { files, setFolder, setIsLoading, handleRemoveFolder } = useFiles();
     const [countStorageUsed, setCountStorageUsed] = useState(0);
     const [folders, setFolders] = useState<IFolder[]>([]);
     const [openFormFolder, setOpenFormFolder] = useState(false);
@@ -90,17 +90,36 @@ export function LeftSideBar() {
         return toast.success('Pasta criada com sucesso');
     }
 
+    async function handleDeleteFolder(id: string) {
+        await handleRemoveFolder(id);
+        setFolders((state) => state.filter((folder) => folder._id !== id));
+        return toast.success('Pasta deletada!');
+    }
+
     return (
         <Container>
-            <ToastContainer />
             <div>
                 <img src={logo} alt="logo" />
-
+                <ToastContainer />
                 <ButtonPlus onClick={() => setOpenFormFolder(!openFormFolder)}>
                     <img src={plusSVG} alt="plus" />
-                    <span>Criar Pasta</span>
+                    <span>Gerenciar Pastas</span>
                 </ButtonPlus>
+            </div>
 
+            <div style={{
+                flex: 1,
+                width: "100%",
+                padding: "0.5rem",
+            }}>
+                <span>Pastas</span>
+
+                {folders.map((folder: IFolder) => (
+                    <Folder key={folder._id} onClick={() => setFolder(folder)}>
+                        <img src={folderSVG} alt="folder" width="16" height="16" />
+                        <span>{folder.name}</span>
+                    </Folder>
+                ))}
                 {openFormFolder && (
                     <Modal
                         isOpen={openFormFolder}
@@ -108,6 +127,26 @@ export function LeftSideBar() {
                         overlayClassName="react-modal-overlay"
                         className="react-modal-content"
                     >
+                        <div className="containerModalFolderCreate">
+                            {folders.map((folder: IFolder) => (
+                                <div className="containerFoldersDelete">
+                                    <div>
+                                        <img src={folderSVG} alt="pasta" width="20" height="20" />
+                                        <span>{folder.name}</span>
+                                    </div>
+
+                                    <img src={trashSVG} alt="lixo"
+                                        style={{ cursor: "pointer" }} width="20" height="20"
+                                        onClick={() => {
+                                            window.confirm(`Tem certeza que deseja excluir a pasta: ${folder.name}?`) &&
+                                                handleDeleteFolder(folder._id);
+
+                                        }}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+
                         <div className="containerModalFolderCreate">
                             <div className="containerInput">
                                 <img src={folderSVG} alt="pasta" width="20" height="20" />
@@ -125,21 +164,8 @@ export function LeftSideBar() {
                                 </button>
                             </div>
                         </div>
-
                     </Modal>
                 )}
-
-                <span>Pastas</span>
-
-                {folders.map((folder: IFolder) => (
-                    <Folder key={folder._id} onClick={() => setFolder(folder)}>
-                        <img src={folderSVG} alt="folder" width="16" height="16" />
-                        <span>{folder.name}</span>
-                        {/* <div>
-                            <img src={trashSVG} alt="deletar" width="12" height="12" />
-                        </div> */}
-                    </Folder>
-                ))}
             </div>
 
             {/* <Menu>

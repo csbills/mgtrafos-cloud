@@ -234,6 +234,7 @@ export const GlobalStyle = createGlobalStyle`
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        margin-top: 2rem;
 
         .containerInput {
             padding: 0.5rem;
@@ -267,6 +268,30 @@ export const GlobalStyle = createGlobalStyle`
                 border-radius: 4px;
                 border: 0.5px solid #A8A8B3;
                 background: #ffff;
+                transition: filter 0.2s;
+
+                &:hover {
+                    filter: brightness(0.8);    
+                }
+            }
+        }
+
+        .containerFoldersDelete{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            width:100%;
+            margin-top: 1rem;
+            background: var(--shape);
+            padding: 1rem;
+
+            img {
+                margin-right: 1rem;                
+            }
+
+            span {
+                margin-right: 2rem;
             }
         }
 

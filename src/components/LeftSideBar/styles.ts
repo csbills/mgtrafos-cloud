@@ -8,12 +8,13 @@ export const Container = styled.div`
 
     background: var(--shape);
 
-    padding: 2rem 0rem;
+    padding: 1rem 0rem;
 
     span {
         width: 100%;
         font-weight: 600;
     }
+
 `;
 
 export const Folder = styled.div`
@@ -65,7 +66,7 @@ export const ButtonPlus = styled.button`
     padding: 0 1.5rem;
     letter-spacing: 1px;
 
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
     margin-top: 3rem;
 
     img {

@@ -54,6 +54,7 @@ interface IFileContextData {
     setFolder: (folder: IFolder) => void;
     setIsLoading: (aux: boolean) => void;
     setOpenDropdown: (aux: boolean) => void;
+    handleRemoveFolder: (id: string) => void;
 }
 const FilesContext = createContext<IFileContextData>({} as IFileContextData);
 
@@ -95,6 +96,21 @@ const FileProvider: React.FC = ({ children }) => {
         }
 
         setIsLoading(false);
+    }
+
+    async function handleRemoveFolder(id: string) {
+        if (id) {
+            await api.get(`posts/${id}`).then(response => {
+                const { data } = response;
+                if (data) {
+                    data.map((post: IPost) => {
+                        deleteFile(post._id);
+                    });
+                }
+            });
+
+            api.delete(`folders/${id}`);
+        }
     }
 
     function getFilteredFiles(search: string) {
@@ -182,6 +198,7 @@ const FileProvider: React.FC = ({ children }) => {
             setIsLoading,
             setOpenDropdown,
             openDropdown,
+            handleRemoveFolder,
         }}>
             {children}
         </FilesContext.Provider>
