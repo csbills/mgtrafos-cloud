@@ -46,7 +46,6 @@ export function LeftSideBar() {
                     sumStorageUsed += file.size;
                 })
             }
-
             setCountStorageUsed(sumStorageUsed);
         })
     }
@@ -129,7 +128,7 @@ export function LeftSideBar() {
                     >
                         <div className="containerModalFolderCreate">
                             {folders.map((folder: IFolder) => (
-                                <div className="containerFoldersDelete">
+                                <div key={folder._id} className="containerFoldersDelete">
                                     <div>
                                         <img src={folderSVG} alt="pasta" width="20" height="20" />
                                         <span>{folder.name}</span>
@@ -140,7 +139,6 @@ export function LeftSideBar() {
                                         onClick={() => {
                                             window.confirm(`Tem certeza que deseja excluir a pasta: ${folder.name}?`) &&
                                                 handleDeleteFolder(folder._id);
-
                                         }}
                                     />
                                 </div>

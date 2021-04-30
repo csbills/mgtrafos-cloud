@@ -59,7 +59,7 @@ export function QuickAccess() {
                 />
             )}
             {filteredFiles.map((file) => (
-                <FileCard onClick={() => {
+                <FileCard key={file._id} onClick={() => {
                     setOpenDropdown(!openDropdown);
                     setFileId(file._id);
                     setFileName(file.name);
