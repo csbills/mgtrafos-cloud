@@ -15,6 +15,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 
 export interface IFolder {
     _id: string,
+    folderSrc: string,
     name: string,
     user: string,
     createdAt: string,
@@ -72,11 +73,13 @@ export function LeftSideBar() {
         }
 
         await api.post('/folders', {
+            folderSrc: 'raiz',
             name: inputFolderName,
         }).then(response => {
             setFolders([...folders,
             {
                 _id: response.data._id,
+                folderSrc: response.data.folderSrc,
                 name: response.data.name,
                 user: response.data.user_id,
                 createdAt: response.data.createdAt,

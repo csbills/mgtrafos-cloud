@@ -28,6 +28,8 @@ export const Container = styled.div`
             margin-left: 1rem;
             border: none;
             background:transparent;
+            align-items: center;
+            justify-content: center;
         }
 
         img {

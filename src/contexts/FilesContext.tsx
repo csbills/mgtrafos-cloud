@@ -22,10 +22,12 @@ export interface IPost {
 
 export interface IFolder {
     _id: string,
+    folderSrc: string,
     name: string,
     user: string,
     createdAt: string,
 }
+
 
 export interface IFile {
     id: string;

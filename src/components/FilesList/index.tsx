@@ -12,6 +12,8 @@ import pdf from '../../assets/pdf.svg';
 import xls from '../../assets/xls.svg';
 import jpg from '../../assets/jpg.svg';
 import png from '../../assets/png.svg';
+import api from '../../services/api';
+import folderSVG from '../../assets/folder-blue.svg';
 
 export interface IFile {
     id: string;
@@ -34,16 +36,42 @@ interface IPost {
     createdAt: string;
 }
 
-export function FilesList() {
-    const { getFiles, filteredFiles, uploadedFiles, isLoading, setOpenDropdown, openDropdown } = useFiles();
+interface Props {
+    folderSrc?: string,
+    updateListIndex: number,
+}
+
+interface Subfolder {
+    _id: string;
+    name: string;
+    folderSrc: string;
+    user: string;
+    createdAt: string;
+}
+
+export function FilesList({ folderSrc, updateListIndex }: Props) {
+    const { getFiles, filteredFiles, uploadedFiles, isLoading, setOpenDropdown, openDropdown, setFolder } = useFiles();
     const [fileId, setFileId] = useState('');
     const [fileName, setFileName] = useState('');
     const [fileSize, setFileSize] = useState('');
     const [fileUrl, setFileUrl] = useState('');
+    const [subfolders, setSubfolders] = useState<Subfolder[]>([]);
 
     useEffect(() => {
         getFiles();
     }, [uploadedFiles]);
+
+    useEffect(() => {
+        getSubFolders();
+    }, [folderSrc,updateListIndex]);
+
+    async function getSubFolders() {
+        const { data } = await api.get(`subfolders/${folderSrc}`);
+
+        if (data) {
+            setSubfolders(data);
+        }
+    }
 
     function getExtension(fileName: string) {
         return fileName.split('.').pop();
@@ -111,6 +139,16 @@ export function FilesList() {
                         </tr>
                     </thead>
                     <tbody>
+                        {subfolders.map((subfolder: Subfolder) => (
+                            <tr key={subfolder._id} onClick={() => setFolder(subfolder)}>
+                                <td><img src={folderSVG} alt="foldersvg" /></td>
+                                <td>{subfolder.name}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        ))}
+
                         {filteredFiles.map((file: IPost) => (
                             <tr key={file._id}>
                                 <td><img src={`${getIcon(file.name)}`} alt="file-icon" /></td>
