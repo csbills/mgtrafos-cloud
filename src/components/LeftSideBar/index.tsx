@@ -27,6 +27,7 @@ export function LeftSideBar() {
     const { files, setFolder, setIsLoading, handleRemoveFolder } = useFiles();
     const [countStorageUsed, setCountStorageUsed] = useState(0);
     const [folders, setFolders] = useState<IFolder[]>([]);
+    const [filteredFolders, setFilteredFolders] = useState<IFolder[]>([]);
     const [openFormFolder, setOpenFormFolder] = useState(false);
     const [inputFolderName, setInputFolderName] = useState('');
 
@@ -55,15 +56,67 @@ export function LeftSideBar() {
         try {
             setIsLoading(true);
             const { data } = await api.get('/folders');
+
             if (data) {
-                setFolders(data);
-                setFolder(data[0]);
+                setFilteredFolders(data);
                 setIsLoading(false);
+                handleFilteredFolders();
             }
+
         } catch (erro) {
             console.log(erro);
             setIsLoading(false);
         }
+    }
+
+    function handleFilteredFolders() {
+        const comercial = sessionStorage.getItem('@mgtrafos/group_comercial');
+        const administrativo = sessionStorage.getItem('@mgtrafos/group_administrativo');
+        const contratos = sessionStorage.getItem('@mgtrafos/group_contratos');
+        const financeiro = sessionStorage.getItem('@mgtrafos/group_financeiro');
+        const meioAmbiente = sessionStorage.getItem('@mgtrafos/group_meioAmbiente');
+        const tecnico = sessionStorage.getItem('@mgtrafos/group_tecnico');
+        const seguranca = sessionStorage.getItem('@mgtrafos/group_seguranca');
+        const pedreira = sessionStorage.getItem('@mgtrafos/group_pedreira');
+        const fotos = sessionStorage.getItem('@mgtrafos/group_fotos');
+
+        if (comercial === '"false"') {
+            setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'comercial'));
+        }
+
+        if (administrativo === '"false"') {
+            setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'administrativo'));
+        }
+
+        if (contratos === '"false"') {
+            setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'contratos'));
+        }
+
+        if (financeiro === '"false"') {
+            setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'financeiro'));
+        }
+
+        if (meioAmbiente === '"false"') {
+            setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'meio ambiente'));
+        }
+
+        if (tecnico === '"false"') {
+            setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'técnico'));
+        }
+
+        if (seguranca === '"false"') {
+            setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'segurança'));
+        }
+
+        if (pedreira === '"false"') {
+            setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'pedreira'));
+        }
+
+        if (fotos === '"false"') {
+            setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'fotos'));
+        }
+
+        setFolder(filteredFolders[0]);
     }
 
     async function handleCreateNewFolder() {
@@ -116,7 +169,7 @@ export function LeftSideBar() {
             }}>
                 <span>Pastas</span>
 
-                {folders.map((folder: IFolder) => (
+                {filteredFolders.map((folder: IFolder) => (
                     <Folder key={folder._id} onClick={() => setFolder(folder)}>
                         <img src={folderSVG} alt="folder" width="16" height="16" />
                         <span>{folder.name}</span>
@@ -130,7 +183,7 @@ export function LeftSideBar() {
                         className="react-modal-content"
                     >
                         <div className="containerModalFolderCreate">
-                            {folders.map((folder: IFolder) => (
+                            {filteredFolders.map((folder: IFolder) => (
                                 <div key={folder._id} className="containerFoldersDelete">
                                     <div>
                                         <img src={folderSVG} alt="pasta" width="20" height="20" />
