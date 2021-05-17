@@ -55,6 +55,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 sessionStorage.setItem('@mgtrafos/group_seguranca', JSON.stringify(data.user.group_seguranca));
                 sessionStorage.setItem('@mgtrafos/group_pedreira', JSON.stringify(data.user.group_pedreira));
                 sessionStorage.setItem('@mgtrafos/group_fotos', JSON.stringify(data.user.group_fotos));
+                sessionStorage.setItem('@mgtrafos/isAdmin', JSON.stringify(data.user.isAdmin));
 
                 sessionStorage.setItem('@mgtrafos/token', JSON.stringify(data.token));
                 sessionStorage.setItem('@mgtrafos/user_name', JSON.stringify(data.user.name));

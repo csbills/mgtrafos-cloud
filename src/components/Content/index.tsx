@@ -10,6 +10,7 @@ import Modal from 'react-modal';
 import listSVG from '../../assets/list.svg';
 import gridSVG from '../../assets/grid.svg';
 import folderSVG from '../../assets/folder-blue.svg'
+import settingsPNG from '../../assets/settings.png';
 import api from '../../services/api';
 
 Modal.setAppElement('#root');
@@ -85,6 +86,10 @@ export function Content() {
             <div className="modeDisplay">
                 {folder ? <span>{folder.name}</span> : <span>   </span>}
                 <div>
+                    <button>
+                        <img src={settingsPNG} alt="gerenciar usuario" />
+                        Gerenciar Usuários
+                    </button>
                     <button onClick={() => setOpenFormSubFolder(true)}>
                         <img src={folderSVG} alt="subpasta" />
                         Criar Subpasta
