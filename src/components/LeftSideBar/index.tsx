@@ -30,6 +30,7 @@ export function LeftSideBar() {
     const [filteredFolders, setFilteredFolders] = useState<IFolder[]>([]);
     const [openFormFolder, setOpenFormFolder] = useState(false);
     const [inputFolderName, setInputFolderName] = useState('');
+    const [isAdminState, setIsAdminState] = useState(false);
 
     useEffect(() => {
         getFolders();
@@ -79,6 +80,11 @@ export function LeftSideBar() {
         const seguranca = sessionStorage.getItem('@mgtrafos/group_seguranca');
         const pedreira = sessionStorage.getItem('@mgtrafos/group_pedreira');
         const fotos = sessionStorage.getItem('@mgtrafos/group_fotos');
+        const isAdmin = sessionStorage.getItem('@mgtrafos/isAdmin');
+
+        if (isAdmin === '"true"') {
+            setIsAdminState(true);
+        }
 
         if (comercial === '"false"') {
             setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'comercial'));
@@ -156,10 +162,13 @@ export function LeftSideBar() {
             <div>
                 <img src={logo} alt="logo" />
                 <ToastContainer />
-                <ButtonPlus onClick={() => setOpenFormFolder(!openFormFolder)}>
-                    <img src={plusSVG} alt="plus" />
-                    <span>Gerenciar Pastas</span>
-                </ButtonPlus>
+                {isAdminState && (
+                    <ButtonPlus onClick={() => setOpenFormFolder(!openFormFolder)}>
+                        <img src={plusSVG} alt="plus" />
+                        <span>Gerenciar Pastas</span>
+                    </ButtonPlus>
+
+                )}
             </div>
 
             <div style={{
