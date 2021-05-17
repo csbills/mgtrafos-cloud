@@ -167,7 +167,6 @@ export function LeftSideBar() {
                         <img src={plusSVG} alt="plus" />
                         <span>Gerenciar Pastas</span>
                     </ButtonPlus>
-
                 )}
             </div>
 
