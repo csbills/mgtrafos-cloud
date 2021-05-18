@@ -79,6 +79,28 @@ export const ButtonPlus = styled.button`
     }
 `;
 
+export const ButtonInvisible = styled.button`
+    width: 100%;
+    height: 2.5rem;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    background: transparent;
+
+    border: 0;
+    border-radius: 0.5rem;
+
+
+    padding: 0 1.5rem;
+    letter-spacing: 1px;
+
+    margin-bottom: 2rem;
+    margin-top: 3rem;
+`;
+
 export const StorageCount = styled.div`
     display: flex;
     flex-direction:column;
