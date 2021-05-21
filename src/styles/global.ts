@@ -1,6 +1,10 @@
 import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
+    ::-webkit-scrollbar {
+        width: 0px;
+    }
+
     :root {        
         --shape: rgba(245,245,245,1);
         --background: #FFF;
@@ -98,11 +102,24 @@ export const GlobalStyle = createGlobalStyle`
 
     .react-modal-content {
         width: 100%;
-        max-width: 576px;
+        max-width: 70vw;
+        max-height: 70vh;
         background: var(--background);
         padding: 3rem;
         position: relative;
         border-radius: 0.25rem;
+        overflow: auto;
+    }
+
+    .react-modal-content-users {
+        width: 100%;
+        max-width: 70vw;
+        max-height: 70vh;
+        background: var(--background);
+        padding: 3rem;
+        position: relative;
+        border-radius: 0.25rem;
+        overflow: auto;
     }
 
     .react-modal-close {
