@@ -1,4 +1,4 @@
-import { Container, ButtonPlus, Folder, StorageCount } from './styles';
+import { Container, ButtonPlus, Folder, StorageCount, ButtonInvisible } from './styles';
 import logo from '../../assets/logo-black.png';
 import folderSVG from '../../assets/folder-blue.svg';
 import plusSVG from '../../assets/plus.svg';
@@ -34,6 +34,7 @@ export function LeftSideBar() {
 
     useEffect(() => {
         getFolders();
+        setFolder(filteredFolders[0]);
     }, []);
 
     useEffect(() => {
@@ -121,8 +122,6 @@ export function LeftSideBar() {
         if (fotos === '"false"') {
             setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'fotos'));
         }
-
-        setFolder(filteredFolders[0]);
     }
 
     async function handleCreateNewFolder() {
@@ -162,12 +161,14 @@ export function LeftSideBar() {
             <div>
                 <img src={logo} alt="logo" />
                 <ToastContainer />
-                {isAdminState && (
-                    <ButtonPlus onClick={() => setOpenFormFolder(!openFormFolder)}>
-                        <img src={plusSVG} alt="plus" />
-                        <span>Gerenciar Pastas</span>
-                    </ButtonPlus>
-                )}
+                {
+                    isAdminState ? (
+                        <ButtonPlus onClick={() => setOpenFormFolder(!openFormFolder)}>
+                            <img src={plusSVG} alt="plus" />
+                            <span>Gerenciar Pastas</span>
+                        </ButtonPlus>
+                    ) : <ButtonInvisible />                    
+                }
             </div>
 
             <div style={{

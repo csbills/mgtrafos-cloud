@@ -67,6 +67,7 @@ export function FilesList({ folderSrc, updateListIndex }: Props) {
 
     async function getSubFolders() {
         const { data } = await api.get(`subfolders/${folderSrc}`);
+        console.log(data);
 
         if (data) {
             setSubfolders(data);
