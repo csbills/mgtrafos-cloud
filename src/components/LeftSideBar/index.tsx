@@ -4,6 +4,7 @@ import folderSVG from '../../assets/folder-blue.svg';
 import plusSVG from '../../assets/plus.svg';
 import clockSVG from '../../assets/clock.svg';
 import trashSVG from '../../assets/trash.svg';
+import profileImg from '../../assets/profile-user.svg';
 import { IPost, useFiles } from '../../contexts/FilesContext';
 import { useEffect, useState } from 'react';
 import api from '../../services/api';
@@ -12,147 +13,104 @@ import Modal from 'react-modal';
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
+import { TableContainer } from '../Content/styles';
 
 export interface IFolder {
     _id: string,
     folderSrc: string,
     name: string,
-    user: string,
     createdAt: string,
+}
+
+interface Group {
+    _id: string,
+    users: [string],
+    name: string,
+    createdAt: string,
+}
+
+interface User {
+    _id: string,
+    name: string,
+    email: string,
+    isAdmin: string,
 }
 
 Modal.setAppElement('#root');
 
 export function LeftSideBar() {
-    const { files, setFolder, setIsLoading, handleRemoveFolder } = useFiles();
+    const { files, getUsers, users, setFolder, setIsLoading, handleRemoveGroup } = useFiles();
     const [countStorageUsed, setCountStorageUsed] = useState(0);
-    const [folders, setFolders] = useState<IFolder[]>([]);
-    const [filteredFolders, setFilteredFolders] = useState<IFolder[]>([]);
+    const [groups, setGroups] = useState<Group[]>([]);
+    const [filteredGroups, setFilteredGroups] = useState<Group[]>([]);
     const [openFormFolder, setOpenFormFolder] = useState(false);
+    const [openCreateGroupModal, setOpenCreateGroupModal] = useState(false);
     const [inputFolderName, setInputFolderName] = useState('');
     const [isAdminState, setIsAdminState] = useState(false);
+    let usersAllowed = [''];
 
     useEffect(() => {
-        getFolders();
-        setFolder(filteredFolders[0]);
+        if (sessionStorage.getItem('@mgtrafos/isAdmin') === '"true"') {
+            setIsAdminState(true);
+        }
+
+        getGroups();
+        getUsers();
     }, []);
 
     useEffect(() => {
-        getAllFiles();
-    }, [files]);
+        filterGroups();
+    }, [groups]);
 
-    async function getAllFiles() {
-        let sumStorageUsed = 0;
-        folders.map(async folder => {
-            const { data } = await api.get(`posts/${folder._id}`);
-            if (data) {
-                data.map((file: IPost) => {
-                    sumStorageUsed += file.size;
-                })
-            }
-            setCountStorageUsed(sumStorageUsed);
-        })
-    }
-
-    async function getFolders() {
-        try {
-            setIsLoading(true);
-            const { data } = await api.get('/folders');
-
-            if (data) {
-                setFilteredFolders(data);
-                setIsLoading(false);
-                handleFilteredFolders();
-            }
-
-        } catch (erro) {
-            console.log(erro);
+    async function getGroups() {
+        setIsLoading(true);
+        const { data } = await api.get('/groups');
+        if (data) {
+            setGroups(data);
             setIsLoading(false);
         }
     }
 
-    function handleFilteredFolders() {
-        const comercial = sessionStorage.getItem('@mgtrafos/group_comercial');
-        const administrativo = sessionStorage.getItem('@mgtrafos/group_administrativo');
-        const contratos = sessionStorage.getItem('@mgtrafos/group_contratos');
-        const financeiro = sessionStorage.getItem('@mgtrafos/group_financeiro');
-        const meioAmbiente = sessionStorage.getItem('@mgtrafos/group_meioAmbiente');
-        const tecnico = sessionStorage.getItem('@mgtrafos/group_tecnico');
-        const seguranca = sessionStorage.getItem('@mgtrafos/group_seguranca');
-        const pedreira = sessionStorage.getItem('@mgtrafos/group_pedreira');
-        const fotos = sessionStorage.getItem('@mgtrafos/group_fotos');
-        const isAdmin = sessionStorage.getItem('@mgtrafos/isAdmin');
-
-        if (isAdmin === '"true"') {
-            setIsAdminState(true);
-        }
-
-        if (comercial === '"false"') {
-            setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'comercial'));
-        }
-
-        if (administrativo === '"false"') {
-            setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'administrativo'));
-        }
-
-        if (contratos === '"false"') {
-            setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'contratos'));
-        }
-
-        if (financeiro === '"false"') {
-            setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'financeiro'));
-        }
-
-        if (meioAmbiente === '"false"') {
-            setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'meio ambiente'));
-        }
-
-        if (tecnico === '"false"') {
-            setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'técnico'));
-        }
-
-        if (seguranca === '"false"') {
-            setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'segurança'));
-        }
-
-        if (pedreira === '"false"') {
-            setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'pedreira'));
-        }
-
-        if (fotos === '"false"') {
-            setFilteredFolders((state) => state.filter((folder) => folder.name.toLowerCase() !== 'fotos'));
-        }
+    function handlePutUsersAllowed(id: string) {
+        usersAllowed.push(id);
     }
 
-    async function handleCreateNewFolder() {
+    function filterGroups() {
+        const userId = sessionStorage.getItem('@mgtrafos/user_id');
+        const filteredGroupsAux: Group[] = [];
+
+        groups.map((group: Group) => {
+            group.users.map((id: string) => {
+                if (`"${id}"` === userId) {
+                    filteredGroupsAux.push(group);
+                }
+            })
+        });
+
+        setFilteredGroups(filteredGroupsAux);
+        console.log(filteredGroupsAux);
+    }
+
+    async function handleCreateNewGroup() {
         if (!inputFolderName) {
-            console.log('nome tem que ser preenchido');
-            return toast.error('Preencha o nome da pasta');
+            return toast.error('Preencha o nome do Grupo');
         }
 
-        await api.post('/folders', {
-            folderSrc: 'raiz',
+        await api.post('/groups', {
             name: inputFolderName,
-        }).then(response => {
-            setFolders([...folders,
-            {
-                _id: response.data._id,
-                folderSrc: response.data.folderSrc,
-                name: response.data.name,
-                user: response.data.user_id,
-                createdAt: response.data.createdAt,
-            }
-            ])
-        });
-        getFolders();
+            users: usersAllowed,
+        })
+
+        getGroups();
         setOpenFormFolder(false);
         setInputFolderName('');
-        return toast.success('Pasta criada com sucesso');
+        usersAllowed = [''];
+        return toast.success('Grupo criado com sucesso');
     }
 
-    async function handleDeleteFolder(id: string) {
-        await handleRemoveFolder(id);
-        setFolders((state) => state.filter((folder) => folder._id !== id));
+    async function handleDeleteGroup(id: string) {
+        await handleRemoveGroup(id);
+        setGroups((state) => state.filter((group) => group._id !== id));
         return toast.success('Pasta deletada!');
     }
 
@@ -167,7 +125,7 @@ export function LeftSideBar() {
                             <img src={plusSVG} alt="plus" />
                             <span>Gerenciar Pastas</span>
                         </ButtonPlus>
-                    ) : <ButtonInvisible />                    
+                    ) : <ButtonInvisible />
                 }
             </div>
 
@@ -176,14 +134,20 @@ export function LeftSideBar() {
                 width: "100%",
                 padding: "0.5rem",
             }}>
-                <span>Pastas</span>
+                <span>Grupos</span>
 
-                {filteredFolders.map((folder: IFolder) => (
-                    <Folder key={folder._id} onClick={() => setFolder(folder)}>
+                {filteredGroups.map((group: Group) => (
+                    <Folder key={group._id} onClick={() => setFolder({
+                        _id: group._id,
+                        folderSrc: 'raiz',
+                        name: group.name,
+                        createdAt: group.createdAt
+                    })}>
                         <img src={folderSVG} alt="folder" width="16" height="16" />
-                        <span>{folder.name}</span>
+                        <span>{group.name}</span>
                     </Folder>
                 ))}
+
                 {openFormFolder && (
                     <Modal
                         isOpen={openFormFolder}
@@ -192,18 +156,18 @@ export function LeftSideBar() {
                         className="react-modal-content"
                     >
                         <div className="containerModalFolderCreate">
-                            {filteredFolders.map((folder: IFolder) => (
-                                <div key={folder._id} className="containerFoldersDelete">
+                            {groups.map((group: Group) => (
+                                <div key={group._id} className="containerFoldersDelete">
                                     <div>
                                         <img src={folderSVG} alt="pasta" width="20" height="20" />
-                                        <span>{folder.name}</span>
+                                        <span>{group.name}</span>
                                     </div>
 
                                     <img src={trashSVG} alt="lixo"
                                         style={{ cursor: "pointer" }} width="20" height="20"
                                         onClick={() => {
-                                            window.confirm(`Tem certeza que deseja excluir a pasta: ${folder.name}?`) &&
-                                                handleDeleteFolder(folder._id);
+                                            window.confirm(`Tem certeza que deseja excluir a pasta: ${group.name}?`) &&
+                                                handleDeleteGroup(group._id);
                                         }}
                                     />
                                 </div>
@@ -211,40 +175,77 @@ export function LeftSideBar() {
                         </div>
 
                         <div className="containerModalFolderCreate">
-                            <div className="containerInput">
-                                <img src={folderSVG} alt="pasta" width="20" height="20" />
-                                <input
-                                    type="text"
-                                    placeholder="Nome da pasta"
-                                    onChange={event => setInputFolderName(event.target.value)} />
-                            </div>
                             <div className="containerButton">
                                 <button onClick={() => setOpenFormFolder(false)}>Cancelar</button>
                                 <button
                                     style={{ background: "#30E383", color: "#ffff", borderColor: "#30E383" }}
-                                    onClick={handleCreateNewFolder}>
-                                    Criar
+                                    onClick={() => {
+                                        setOpenFormFolder(false);
+                                        setOpenCreateGroupModal(true);
+                                    }}>
+                                    Criar Grupo
                                 </button>
                             </div>
                         </div>
                     </Modal>
                 )}
+
+                <Modal
+                    isOpen={openCreateGroupModal}
+                    onRequestClose={() => setOpenCreateGroupModal(false)}
+                    overlayClassName="react-modal-overlay"
+                    className="react-modal-content"
+                >
+
+                    <div className="containerModalFolderCreate">
+                        <div className="containerInput">
+                            <img src={folderSVG} alt="pasta" width="20" height="20" />
+                            <input
+                                type="text"
+                                placeholder="Nome do Grupo"
+                                onChange={event => setInputFolderName(event.target.value)} />
+                        </div>
+
+                        <div style={{ width: '100%', marginBottom: '2rem' }}>
+                            <TableContainer>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Nome</th>
+                                            <th>Email</th>
+                                            <th>Permitir Usuário</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody style={{ overflow: 'auto' }}>
+                                        {users.map((user: User) => (
+                                            <tr key={user._id}>
+                                                <td><img src={profileImg} width={20} height={20} alt="profile" /></td>
+                                                <td>{user.name}</td>
+                                                <td>{user.email}</td>
+                                                <td><input type="checkbox" onClick={() => handlePutUsersAllowed(user._id)} /></td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </TableContainer>
+                        </div>
+
+                        <div className="containerButton">
+                            <button onClick={() => setOpenCreateGroupModal(false)}>Cancelar</button>
+                            <button
+                                style={{ background: "#30E383", color: "#ffff", borderColor: "#30E383" }}
+                                onClick={() => {
+                                    handleCreateNewGroup();
+                                    setOpenCreateGroupModal(false)
+                                }}>
+                                Criar Grupo
+                                </button>
+                        </div>
+                    </div>
+                </Modal>
             </div>
-
-            {/* <Menu>
-                    <span>Menu</span>
-
-                    <Folder>
-                        <img src={clockSVG} alt="folder" width="16" height="16" />
-                        <span>Atividades recentes</span>
-                    </Folder>
-
-                    <Folder>
-                        <img src={trashSVG} alt="folder" width="16" height="16" />
-                        <span>Lixeira</span>
-                    </Folder>
-                </Menu> */}
-
 
             <StorageCount>
                 <span><strong>{fileSize(Math.round(countStorageUsed))} </strong>of 5GB</span>

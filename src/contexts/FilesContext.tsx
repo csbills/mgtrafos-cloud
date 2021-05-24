@@ -24,7 +24,6 @@ export interface IFolder {
     _id: string,
     folderSrc: string,
     name: string,
-    user: string,
     createdAt: string,
 }
 
@@ -41,12 +40,29 @@ export interface IFile {
     url: string;
 }
 
+interface User {
+    _id: string,
+    name: string,
+    email: string,
+    group_administrativo: string,
+    group_comercial: string,
+    group_contratos: string,
+    group_financeiro: string,
+    group_fotos: string,
+    group_meioAmbiente: string,
+    group_pedreira: string,
+    group_seguranca: string,
+    group_tecnico: string,
+    isAdmin: string,
+}
+
 interface IFileContextData {
     files: IPost[];
     folder?: IFolder;
     isLoading: boolean;
     openDropdown: boolean;
     uploadedFiles: IFile[];
+    users: User[];
     deleteFile(id: string): void;
     handleUpload(file: any): void;
     getFiles: () => Promise<void>;
@@ -56,7 +72,8 @@ interface IFileContextData {
     setFolder: (folder: IFolder) => void;
     setIsLoading: (aux: boolean) => void;
     setOpenDropdown: (aux: boolean) => void;
-    handleRemoveFolder: (id: string) => void;
+    handleRemoveGroup: (id: string) => void;
+    getUsers: () => Promise<void>;
 }
 const FilesContext = createContext<IFileContextData>({} as IFileContextData);
 
@@ -64,6 +81,7 @@ const FileProvider: React.FC = ({ children }) => {
     const [files, setFiles] = useState<IPost[]>([]);
     const [uploadedFiles, setUploadedFiles] = useState<IFile[]>([]);
     const [filteredFiles, setFilteredFiles] = useState<IPost[]>([]);
+    const [users, setUsers] = useState([]);
     const [folder, setFolder] = useState<IFolder>();
     const [isLoading, setIsLoading] = useState(false);
     const [openDropdown, setOpenDropdown] = useState(false);
@@ -78,11 +96,24 @@ const FileProvider: React.FC = ({ children }) => {
         getFiles();
     }, [folder?._id]);
 
+    useEffect(() => {
+        getUsers();
+    }, []);
+
     const updateFile = useCallback((id, data) => {
         setUploadedFiles((state) =>
             state.map((file) => (file.id === id ? { ...file, ...data } : file))
         );
     }, []);
+
+    async function getUsers() {
+        await api.get('/users').then(response => {
+            const { data } = response;
+
+            if (data)
+                setUsers(data);
+        });
+    }
 
     async function getFiles() {
         setIsLoading(true);
@@ -100,18 +131,9 @@ const FileProvider: React.FC = ({ children }) => {
         setIsLoading(false);
     }
 
-    async function handleRemoveFolder(id: string) {
+    async function handleRemoveGroup(id: string) {
         if (id) {
-            await api.get(`posts/${id}`).then(response => {
-                const { data } = response;
-                if (data) {
-                    data.map((post: IPost) => {
-                        deleteFile(post._id);
-                    });
-                }
-            });
-
-            api.delete(`folders/${id}`);
+            await api.delete(`groups/${id}`);
         }
     }
 
@@ -200,7 +222,9 @@ const FileProvider: React.FC = ({ children }) => {
             setIsLoading,
             setOpenDropdown,
             openDropdown,
-            handleRemoveFolder,
+            handleRemoveGroup,
+            getUsers,
+            users,
         }}>
             {children}
         </FilesContext.Provider>

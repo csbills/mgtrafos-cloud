@@ -54,27 +54,23 @@ interface User {
 }
 
 export function Content() {
+    const { users } = useFiles();
     const [isNewUploadModalOpen, setIsNewUploadModalOpen] = useState(false);
     const { setUploadedFiles, folder } = useFiles();
     const [isList, setIsList] = useState(true);
-    const [users, setUsers] = useState([]);
     const [user, setUser] = useState<User>();
     const [openFormSubFolder, setOpenFormSubFolder] = useState(false);
     const [openManagementUsers, setOpenManagementUsers] = useState(false);
     const [openModalEditUser, setOpenModalEditUser] = useState(false);
     const [inputSubFolderName, setInputSubFolderName] = useState('');
     const [updateListIndex, setUpdateListIndex] = useState(0);
+    const [isAdminState, setIsAdminState] = useState(false);
 
     useEffect(() => {
-        api.get('/users').then(response => {
-            const { data } = response;
-
-            if (data)
-                setUsers(data);
-
-            console.log(data);
-        });
-    }, [])
+        if (sessionStorage.getItem('@mgtrafos/isAdmin') === '"true"') {
+            setIsAdminState(true);
+        }
+    }, []);
 
     function handleEditUser(user: User) {
         setOpenManagementUsers(false);
@@ -127,39 +123,6 @@ export function Content() {
                             </div>
                         </HeaderEditProfile>
 
-
-                        <CheckBoxContainer>
-                            <div>
-                                {user?.group_administrativo === "true" ? <input type="checkbox" id="administrativo" name="administrativo" checked />
-                                    : <input type="checkbox" id="administrativo" name="administrativo" />}
-                                <label htmlFor="financeiro">Administrativo</label>
-                            </div>
-
-                            <div>
-                                {user?.group_comercial === "true" ? <input type="checkbox" id="comercial" name="comercial" checked />
-                                    : <input type="checkbox" id="comercial" name="comercial" />}
-                                <label htmlFor="financeiro">Comercial</label>
-                            </div>
-
-                            <div>
-                                {user?.group_contratos === "true" ? <input type="checkbox" id="contratos" name="contratos" checked />
-                                    : <input type="checkbox" id="contratos" name="contratos" />}
-                                <label htmlFor="contratos">Contratos</label>
-                            </div>
-
-                            <div>
-                                {user?.group_financeiro === "true" ? <input type="checkbox" id="financeiro" name="financeiro" checked />
-                                    : <input type="checkbox" id="financeiro" name="financeiro" />}
-                                <label htmlFor="financeiro">Financeiro</label>
-                            </div>
-
-                            <div>
-                                {user?.group_fotos === "true" ? <input type="checkbox" id="fotos" name="fotos" checked />
-                                    : <input type="checkbox" id="fotos" name="fotos" />}
-                                <label htmlFor="fotos">Fotos</label>
-                            </div>
-                        </CheckBoxContainer>
-
                         <FooterEditProfile>
                             <button onClick={handleBackToUsers}>
                                 <img src={arrowBack} alt="voltar" />
@@ -202,7 +165,7 @@ export function Content() {
                                         <td>
                                             <ActionsContainer>
                                                 <img src={editSVG} alt="edit" onClick={() => handleEditUser(user)} />
-                                                <img src={trashSVG} alt="tras" />
+                                                <img src={trashSVG} alt="trash" />
                                             </ActionsContainer>
                                         </td>
                                     </tr>
@@ -245,10 +208,13 @@ export function Content() {
             <div className="modeDisplay">
                 {folder ? <span>{folder.name}</span> : <span>   </span>}
                 <div>
-                    <button onClick={() => setOpenManagementUsers(true)}>
-                        <img src={settingsPNG} alt="gerenciar usuario" />
+                    {isAdminState && (
+                        <button onClick={() => setOpenManagementUsers(true)}>
+                            <img src={settingsPNG} alt="gerenciar usuario" />
                         Gerenciar Usuários
-                    </button>
+                        </button>
+                    )}
+
                     <button onClick={() => setOpenFormSubFolder(true)}>
                         <img src={folderSVG} alt="subpasta" />
                         Criar Subpasta
@@ -264,7 +230,6 @@ export function Content() {
                     </button>) : (<button onClick={() => setIsList(false)}>
                         <img src={gridSVG} alt="Grid" />
                     </button>)}
-
                 </div>
             </div>
 
