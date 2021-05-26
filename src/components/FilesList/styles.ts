@@ -18,6 +18,14 @@ export const Container = styled.div`
             &:nth-child(2) {
                 text-align: left;
             }
+
+            img {
+                width: 0.60rem;
+                height: 0.60rem;
+                margin-left: 0.25rem;
+                opacity: 0.5;
+                cursor: pointer;
+            }
         }
 
         tr{

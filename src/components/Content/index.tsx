@@ -24,6 +24,7 @@ import editSVG from '../../assets/edit.svg';
 import trashSVG from '../../assets/trash.svg';
 import arrowBack from '../../assets/arrow.svg';
 import disketteSVG from '../../assets/diskette.svg';
+import backArrowSVG from '../../assets/go-back-arrow.svg';
 
 import api from '../../services/api';
 
@@ -54,7 +55,7 @@ interface User {
 }
 
 export function Content() {
-    const { users } = useFiles();
+    const { users, callBackFolder } = useFiles();
     const [isNewUploadModalOpen, setIsNewUploadModalOpen] = useState(false);
     const { setUploadedFiles, folder } = useFiles();
     const [isList, setIsList] = useState(true);
@@ -93,7 +94,6 @@ export function Content() {
     }
 
     async function handleCreateNewSubFolder() {
-        console.log(inputSubFolderName, folder?._id);
         await api.post('/folders', {
             folderSrc: folder?._id,
             name: inputSubFolderName,
@@ -119,7 +119,7 @@ export function Content() {
 
                             <div>
                                 <span>{user?.name}</span>
-                                <span>{user?.email}</span>
+                                <span>{user?.email}</span>|
                             </div>
                         </HeaderEditProfile>
 
@@ -206,18 +206,28 @@ export function Content() {
             <Header onOpenNewUploadModal={handleOpenNewUploadModal} />
 
             <div className="modeDisplay">
-                {folder ? <span>{folder.name}</span> : <span>   </span>}
-                <div>
+                {folder ? (
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <img src={backArrowSVG} alt="back" style={{ marginRight: '1rem', cursor: 'pointer' }}
+                            onClick={() => callBackFolder(folder.folderSrc)} />
+                        <span>{folder.name}</span>
+                    </div>
+                ) : <span>   </span>}
+                <div style={{ display: 'flex' }}>
                     {isAdminState && (
-                        <button onClick={() => setOpenManagementUsers(true)}>
-                            <img src={settingsPNG} alt="gerenciar usuario" />
-                        Gerenciar Usuários
+                        <button
+                            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                            onClick={() => setOpenManagementUsers(true)}>
+                            <img src={settingsPNG} alt="gerenciar usuario" style={{ marginRight: '0.25rem' }} />
+                                Gerenciar Usuários
                         </button>
                     )}
 
-                    <button onClick={() => setOpenFormSubFolder(true)}>
-                        <img src={folderSVG} alt="subpasta" />
-                        Criar Subpasta
+                    <button
+                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                        onClick={() => setOpenFormSubFolder(true)}>
+                        <img src={folderSVG} alt="subpasta" style={{ marginRight: '0.25rem' }} />
+                            Criar Subpasta
                     </button>
                     {isList ? (<button onClick={() => setIsList(true)} className="active">
                         <img src={listSVG} alt="List" />
@@ -233,7 +243,8 @@ export function Content() {
                 </div>
             </div>
 
-            {isList ? <FilesList folderSrc={folder?._id} updateListIndex={updateListIndex} /> : <QuickAccess />}
+            {isList ? <FilesList folderSrc={folder?._id} updateListIndex={updateListIndex} /> :
+                <QuickAccess folderSrc={folder?._id} updateListIndex={updateListIndex} />}
 
             <UploadModal
                 isOpen={isNewUploadModalOpen}

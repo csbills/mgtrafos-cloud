@@ -39,7 +39,7 @@ interface User {
 Modal.setAppElement('#root');
 
 export function LeftSideBar() {
-    const { files, getUsers, users, setFolder, setIsLoading, handleRemoveGroup } = useFiles();
+    const { setGroupCallBack, getUsers, getFolders, users, setFolder, setIsLoading, handleRemoveGroup } = useFiles();
     const [countStorageUsed, setCountStorageUsed] = useState(0);
     const [groups, setGroups] = useState<Group[]>([]);
     const [filteredGroups, setFilteredGroups] = useState<Group[]>([]);
@@ -56,6 +56,7 @@ export function LeftSideBar() {
 
         getGroups();
         getUsers();
+        getFolders();
     }, []);
 
     useEffect(() => {
@@ -66,13 +67,17 @@ export function LeftSideBar() {
         setIsLoading(true);
         const { data } = await api.get('/groups');
         if (data) {
-            setGroups(data);
+            setGroups(data.sort((a: Group, b: Group) => {
+                return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+            }));
+
             setIsLoading(false);
         }
     }
 
     function handlePutUsersAllowed(id: string) {
         usersAllowed.push(id);
+        console.log(usersAllowed);
     }
 
     function filterGroups() {
@@ -88,7 +93,6 @@ export function LeftSideBar() {
         });
 
         setFilteredGroups(filteredGroupsAux);
-        console.log(filteredGroupsAux);
     }
 
     async function handleCreateNewGroup() {
@@ -123,7 +127,7 @@ export function LeftSideBar() {
                     isAdminState ? (
                         <ButtonPlus onClick={() => setOpenFormFolder(!openFormFolder)}>
                             <img src={plusSVG} alt="plus" />
-                            <span>Gerenciar Pastas</span>
+                            <span>Gerenciar Grupos</span>
                         </ButtonPlus>
                     ) : <ButtonInvisible />
                 }
@@ -133,119 +137,133 @@ export function LeftSideBar() {
                 flex: 1,
                 width: "100%",
                 padding: "0.5rem",
+                overflow: 'auto',
+                maxHeight: '50vh',
             }}>
+
                 <span>Grupos</span>
 
                 {filteredGroups.map((group: Group) => (
-                    <Folder key={group._id} onClick={() => setFolder({
-                        _id: group._id,
-                        folderSrc: 'raiz',
-                        name: group.name,
-                        createdAt: group.createdAt
-                    })}>
+                    <Folder key={group._id} onClick={() => {
+                        setFolder({
+                            _id: group._id,
+                            folderSrc: 'raiz',
+                            name: group.name,
+                            createdAt: group.createdAt
+                        });
+
+                        setGroupCallBack({
+                            _id: group._id,
+                            folderSrc: 'raiz',
+                            name: group.name,
+                            createdAt: group.createdAt
+                        });
+                    }}>
                         <img src={folderSVG} alt="folder" width="16" height="16" />
                         <span>{group.name}</span>
                     </Folder>
                 ))}
+            </div>
 
-                {openFormFolder && (
-                    <Modal
-                        isOpen={openFormFolder}
-                        onRequestClose={() => setOpenFormFolder(false)}
-                        overlayClassName="react-modal-overlay"
-                        className="react-modal-content"
-                    >
-                        <div className="containerModalFolderCreate">
-                            {groups.map((group: Group) => (
-                                <div key={group._id} className="containerFoldersDelete">
-                                    <div>
-                                        <img src={folderSVG} alt="pasta" width="20" height="20" />
-                                        <span>{group.name}</span>
-                                    </div>
 
-                                    <img src={trashSVG} alt="lixo"
-                                        style={{ cursor: "pointer" }} width="20" height="20"
-                                        onClick={() => {
-                                            window.confirm(`Tem certeza que deseja excluir a pasta: ${group.name}?`) &&
-                                                handleDeleteGroup(group._id);
-                                        }}
-                                    />
-                                </div>
-                            ))}
-                        </div>
 
-                        <div className="containerModalFolderCreate">
-                            <div className="containerButton">
-                                <button onClick={() => setOpenFormFolder(false)}>Cancelar</button>
-                                <button
-                                    style={{ background: "#30E383", color: "#ffff", borderColor: "#30E383" }}
-                                    onClick={() => {
-                                        setOpenFormFolder(false);
-                                        setOpenCreateGroupModal(true);
-                                    }}>
-                                    Criar Grupo
-                                </button>
-                            </div>
-                        </div>
-                    </Modal>
-                )}
-
+            {openFormFolder && (
                 <Modal
-                    isOpen={openCreateGroupModal}
-                    onRequestClose={() => setOpenCreateGroupModal(false)}
+                    isOpen={openFormFolder}
+                    onRequestClose={() => setOpenFormFolder(false)}
                     overlayClassName="react-modal-overlay"
                     className="react-modal-content"
                 >
+                    <div className="containerModalFolderCreate">
+                        {groups.map((group: Group) => (
+                            <div key={group._id} className="containerFoldersDelete">
+                                <div>
+                                    <img src={folderSVG} alt="pasta" width="20" height="20" />
+                                    <span>{group.name}</span>
+                                </div>
+
+                                <img src={trashSVG} alt="lixo"
+                                    style={{ cursor: "pointer" }} width="20" height="20"
+                                    onClick={() => {
+                                        window.confirm(`Tem certeza que deseja excluir a pasta: ${group.name}?`) &&
+                                            handleDeleteGroup(group._id);
+                                    }}
+                                />
+                            </div>
+                        ))}
+                    </div>
 
                     <div className="containerModalFolderCreate">
-                        <div className="containerInput">
-                            <img src={folderSVG} alt="pasta" width="20" height="20" />
-                            <input
-                                type="text"
-                                placeholder="Nome do Grupo"
-                                onChange={event => setInputFolderName(event.target.value)} />
-                        </div>
-
-                        <div style={{ width: '100%', marginBottom: '2rem' }}>
-                            <TableContainer>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Nome</th>
-                                            <th>Email</th>
-                                            <th>Permitir Usuário</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody style={{ overflow: 'auto' }}>
-                                        {users.map((user: User) => (
-                                            <tr key={user._id}>
-                                                <td><img src={profileImg} width={20} height={20} alt="profile" /></td>
-                                                <td>{user.name}</td>
-                                                <td>{user.email}</td>
-                                                <td><input type="checkbox" onClick={() => handlePutUsersAllowed(user._id)} /></td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </TableContainer>
-                        </div>
-
                         <div className="containerButton">
-                            <button onClick={() => setOpenCreateGroupModal(false)}>Cancelar</button>
+                            <button onClick={() => setOpenFormFolder(false)}>Cancelar</button>
                             <button
                                 style={{ background: "#30E383", color: "#ffff", borderColor: "#30E383" }}
                                 onClick={() => {
-                                    handleCreateNewGroup();
-                                    setOpenCreateGroupModal(false)
+                                    setOpenFormFolder(false);
+                                    setOpenCreateGroupModal(true);
                                 }}>
                                 Criar Grupo
                                 </button>
                         </div>
                     </div>
                 </Modal>
-            </div>
+            )}
+
+            <Modal
+                isOpen={openCreateGroupModal}
+                onRequestClose={() => setOpenCreateGroupModal(false)}
+                overlayClassName="react-modal-overlay"
+                className="react-modal-content"
+            >
+
+                <div className="containerModalFolderCreate">
+                    <div className="containerInput">
+                        <img src={folderSVG} alt="pasta" width="20" height="20" />
+                        <input
+                            type="text"
+                            placeholder="Nome do Grupo"
+                            onChange={event => setInputFolderName(event.target.value)} />
+                    </div>
+
+                    <div style={{ width: '100%', marginBottom: '2rem' }}>
+                        <TableContainer>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Nome</th>
+                                        <th>Email</th>
+                                        <th>Permitir Usuário</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody style={{ overflow: 'auto' }}>
+                                    {users.map((user: User) => (
+                                        <tr key={user._id}>
+                                            <td><img src={profileImg} width={20} height={20} alt="profile" /></td>
+                                            <td>{user.name}</td>
+                                            <td>{user.email}</td>
+                                            <td><input type="checkbox" onClick={() => handlePutUsersAllowed(user._id)} /></td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </TableContainer>
+                    </div>
+
+                    <div className="containerButton">
+                        <button onClick={() => setOpenCreateGroupModal(false)}>Cancelar</button>
+                        <button
+                            style={{ background: "#30E383", color: "#ffff", borderColor: "#30E383" }}
+                            onClick={() => {
+                                handleCreateNewGroup();
+                                setOpenCreateGroupModal(false)
+                            }}>
+                            Criar Grupo
+                                </button>
+                    </div>
+                </div>
+            </Modal>
 
             <StorageCount>
                 <span><strong>{fileSize(Math.round(countStorageUsed))} </strong>of 5GB</span>

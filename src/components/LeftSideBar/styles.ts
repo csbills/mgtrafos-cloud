@@ -66,7 +66,6 @@ export const ButtonPlus = styled.button`
     padding: 0 1.5rem;
     letter-spacing: 1px;
 
-    margin-bottom: 2rem;
     margin-top: 3rem;
 
     img {
@@ -96,8 +95,6 @@ export const ButtonInvisible = styled.button`
 
     padding: 0 1.5rem;
     letter-spacing: 1px;
-
-    margin-bottom: 2rem;
     margin-top: 3rem;
 `;
 
@@ -107,8 +104,7 @@ export const StorageCount = styled.div`
     align-items: center;
     justify-content: flex-start;
     padding: 0 0.75rem;
-    margin-top: 4rem;
-    
+    margin-top: 1rem;    
     width: 100%;
 
     span:first-child {

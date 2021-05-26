@@ -12,8 +12,11 @@ import pdf from '../../assets/pdf.svg';
 import xls from '../../assets/xls.svg';
 import jpg from '../../assets/jpg.svg';
 import png from '../../assets/png.svg';
-import api from '../../services/api';
+import doc from '../../assets/doc.svg';
 import folderSVG from '../../assets/folder-blue.svg';
+import downArrowSVG from '../../assets/down-arrow.svg';
+
+import api from '../../services/api';
 
 export interface IFile {
     id: string;
@@ -63,14 +66,15 @@ export function FilesList({ folderSrc, updateListIndex }: Props) {
 
     useEffect(() => {
         getSubFolders();
-    }, [folderSrc,updateListIndex]);
+    }, [folderSrc, updateListIndex]);
 
     async function getSubFolders() {
         const { data } = await api.get(`subfolders/${folderSrc}`);
-        console.log(data);
 
         if (data) {
-            setSubfolders(data);
+            setSubfolders(data.sort((a: Subfolder, b: Subfolder) => {
+                return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+            }));
         }
     }
 
@@ -99,6 +103,9 @@ export function FilesList({ folderSrc, updateListIndex }: Props) {
 
             case 'png':
                 return png;
+
+            case 'doc':
+                return doc;
         }
     }
 
@@ -132,20 +139,23 @@ export function FilesList({ folderSrc, updateListIndex }: Props) {
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Nome</th>
-                            <th>Tamanho</th>
+                            <th>Nome <img src={downArrowSVG} alt="down-arrow" /></th>
+                            <th>Tamanho <img src={downArrowSVG} alt="down-arrow" /></th>
                             <th>Tipo</th>
-                            <th>Data de inclusão</th>
+                            <th>Data de inclusão <img src={downArrowSVG} alt="down-arrow" /></th>
                             <th>Ação</th>
                         </tr>
                     </thead>
                     <tbody>
                         {subfolders.map((subfolder: Subfolder) => (
-                            <tr key={subfolder._id} onClick={() => setFolder(subfolder)}>
+                            <tr key={subfolder._id} onClick={() => {
+                                setFolder(subfolder);
+                            }}>
                                 <td><img src={folderSVG} alt="foldersvg" /></td>
                                 <td>{subfolder.name}</td>
                                 <td></td>
-                                <td></td>
+                                <td>pasta</td>
+                                <td>{getFormattedDate(subfolder.createdAt)}</td>
                                 <td></td>
                             </tr>
                         ))}

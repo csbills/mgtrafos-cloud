@@ -74,6 +74,9 @@ interface IFileContextData {
     setOpenDropdown: (aux: boolean) => void;
     handleRemoveGroup: (id: string) => void;
     getUsers: () => Promise<void>;
+    callBackFolder: (folderSrc: string) => void;
+    getFolders: () => Promise<void>;
+    setGroupCallBack: (group: IFolder) => void;
 }
 const FilesContext = createContext<IFileContextData>({} as IFileContextData);
 
@@ -83,6 +86,8 @@ const FileProvider: React.FC = ({ children }) => {
     const [filteredFiles, setFilteredFiles] = useState<IPost[]>([]);
     const [users, setUsers] = useState([]);
     const [folder, setFolder] = useState<IFolder>();
+    const [groupCallBack, setGroupCallBack] = useState<IFolder>();
+    const [allFolders, setAllFolders] = useState<IFolder[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [openDropdown, setOpenDropdown] = useState(false);
 
@@ -95,10 +100,6 @@ const FileProvider: React.FC = ({ children }) => {
     useEffect(() => {
         getFiles();
     }, [folder?._id]);
-
-    useEffect(() => {
-        getUsers();
-    }, []);
 
     const updateFile = useCallback((id, data) => {
         setUploadedFiles((state) =>
@@ -113,6 +114,31 @@ const FileProvider: React.FC = ({ children }) => {
             if (data)
                 setUsers(data);
         });
+    }
+
+    function callBackFolder(folderSrc: string) {
+        var aux;
+        allFolders.map((oldFolder: IFolder) => {
+            if (oldFolder._id === folderSrc) {
+                aux = oldFolder;
+            }
+        })
+
+        if (aux) {
+            setFolder(aux);
+        } else {
+            setFolder(groupCallBack);
+        }
+    }
+
+    async function getFolders() {
+        await api.get('/allfolders').then(response => {
+            const { data } = response;
+
+            if (data)
+                setAllFolders(data);
+        });
+
     }
 
     async function getFiles() {
@@ -225,6 +251,9 @@ const FileProvider: React.FC = ({ children }) => {
             handleRemoveGroup,
             getUsers,
             users,
+            callBackFolder,
+            getFolders,
+            setGroupCallBack,
         }}>
             {children}
         </FilesContext.Provider>
